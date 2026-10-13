@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-[#FAF8FF]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Cómo te mueves por la ciudad? | Spanish with Jackie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FAF8FF',
+                            lavender: '#B8A1E3',
+                            purple: '#8B6FC0',
+                            pink: '#E7B8D8',
+                            cream: '#FFF1C9',
+                            plum: '#392D4F',
+                            lightLavender: '#F3EFFF',
+                            lightPink: '#FFF0F7'
+                        }
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        lato: ['Lato', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #392D4F;
+            background-color: #FAF8FF;
+            user-select: none;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(139, 111, 192, 0.1), 0 8px 10px -6px rgba(139, 111, 192, 0.05);
+        }
+        .card-shadow-hover:hover {
+            box-shadow: 0 15px 30px -5px rgba(139, 111, 192, 0.18);
+        }
+        .translation-text {
+            font-size: 0.85em;
+            color: #6B5B85;
+            font-style: italic;
+            transition: all 0.2s ease-in-out;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8FF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B8A1E3;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8B6FC0;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col min-h-screen">
+
+    <header class="bg-white border-b border-brand-lavender/40 sticky top-0 z-40 px-4 py-3 shadow-sm">
+        <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-brand-purple text-white flex items-center justify-center font-bold text-lg shadow-md">
+                    J
+                </div>
+                <div>
+                    <span class="text-xs uppercase tracking-wider text-brand-purple font-bold block leading-none">Spanish with Jackie</span>
+                    <span class="text-sm font-semibold text-brand-plum hidden sm:inline">¿Cómo te mueves por la ciudad?</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="flex-1 max-w-xs sm:max-w-md mx-2 sm:mx-6">
+                <div class="flex justify-between items-center text-xs font-semibold text-brand-plum/70 mb-1">
+                    <span id="screen-step-label">Pantalla 1 de 13</span>
+                    <span id="progress-percent">8%</span>
+                </div>
+                <div class="w-full bg-brand-lightLavender rounded-full h-2.5 overflow-hidden border border-brand-lavender/30">
+                    <div id="progress-bar" class="bg-gradient-to-r from-brand-lavender via-brand-purple to-brand-pink h-2.5 rounded-full transition-all duration-500" style="width: 7.69%"></div>
+                </div>
+            </div>
+
+            <!-- Home Button -->
+            <button onclick="goToScreen(1)" title="Ir al Inicio" class="p-2 rounded-xl border border-brand-lavender/50 text-brand-purple hover:bg-brand-lightLavender hover:border-brand-purple transition-all flex items-center gap-1.5 text-xs font-bold">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="hidden md:inline">INICIO</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 md:p-8 flex flex-col justify-between">
+        
+        <div id="app-container" class="w-full transition-opacity duration-300">
+            <!-- Screen content dynamically loaded -->
+        </div>
+
+        <footer class="mt-8 pt-4 border-t border-brand-lavender/30 flex items-center justify-between gap-4">
+            <button id="btn-prev" onclick="prevScreen()" class="px-5 py-2.5 rounded-xl border-2 border-brand-purple/40 text-brand-purple font-semibold text-sm hover:bg-brand-lightLavender hover:border-brand-purple transition-all flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                <span>ANTERIOR</span>
+            </button>
+
+            <button id="btn-next" onclick="nextScreen()" class="px-6 py-2.5 rounded-xl bg-brand-purple text-white font-semibold text-sm hover:bg-brand-plum shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                <span>SIGUIENTE</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </footer>
+    </main>
+
+    <div id="feedback-modal" class="fixed inset-0 bg-brand-plum/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden transition-opacity">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full card-shadow border-2 border-brand-lavender text-center transform transition-all">
+            <div id="modal-icon" class="w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3"></div>
+            <h3 id="modal-title" class="text-xl font-bold font-heading mb-1 text-brand-plum"></h3>
+            <p id="modal-body" class="text-sm text-brand-plum/80 mb-5 whitespace-pre-line"></p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-brand-purple text-white rounded-xl font-bold hover:bg-brand-plum transition-all shadow-md">
+                Entendido / Got it
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function speakSpanish(text, evt) {
+            if (evt) evt.stopPropagation();
+            playSound('click');
+            if (!('speechSynthesis' in window)) return;
+            
+            window.speechSynthesis.cancel();
+            
+            const cleanText = text.replace(/<[^>]*>/g, '').trim();
+            if (!cleanText) return;
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            const voices = window.speechSynthesis.getVoices();
+            
+            const latamLocales = ['es-MX', 'es-US', 'es-419', 'es-PE', 'es-CO', 'es-AR', 'es-CL', 'es-VE'];
+            let selectedVoice = null;
+
+            for (const loc of latamLocales) {
+                selectedVoice = voices.find(v => v.lang === loc || v.lang.replace('_', '-') === loc);
+                if (selectedVoice) break;
+            }
+
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang.startsWith('es') && 
+                    (v.name.includes('Paulina') || v.name.includes('Lupe') || v.name.includes('Miguel') || 
+                     v.name.includes('Diego') || v.name.includes('Monica') || v.name.includes('Jorge') ||
+                     v.name.includes('Latin') || v.name.includes('Mexico') || v.name.includes('Spanish')));
+            }
+
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang.startsWith('es'));
+            }
+
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+                utterance.lang = selectedVoice.lang;
+            } else {
+                utterance.lang = 'es-MX';
+            }
+
+            utterance.rate = 0.88;
+            utterance.pitch = 1.0;
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+        }
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1);
+                osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } else if (type === 'incorrect') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(174.61, now + 0.2);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        const state = {
+            currentScreen: 1,
+            totalScreens: 13,
+            screenAttempts: { 2: {}, 6: {}, 8: {}, 9: {} },
+            screen2Answers: { 1: '', 3: '', 5: '', 7: '', 9: '' },
+            screen3Matched: {},
+            screen4Prefs: { transportLike: '', transportDislike: '', inCityHas: '', inCityNoHas: '' },
+            screen6Answers: {},
+            screen7Selected: { transport: null, adj1: null, adj2: null },
+            screen7TypedAnswers: { taxi: '', bus: '', bici: '', apie: '', avion: '' },
+            screen8Formed: {},
+            screen9Answers: {},
+            screen10Answers: {},
+            screen11Turn: 0,
+            screen12ModelVisible: false
+        };
+
+        function renderTranslatableText(esText, enText, extraClass = '') {
+            const uid = 'tr_' + Math.random().toString(36).substring(2, 9);
+            const escapedEsText = esText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            return `
+                <span class="inline-block group ${extraClass}">
+                    <span class="cursor-pointer hover:text-brand-purple transition-colors font-medium" onclick="toggleTranslation('${uid}')">${esText}</span>
+                    <button type="button" onclick="speakSpanish('${escapedEsText}', event)" class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] bg-amber-100 text-amber-900 font-bold border border-amber-300 hover:bg-amber-200 transition-all shadow-xs" title="Escuchar pronunciación (Español Latino)">
+                        🔊
+                    </button>
+                    <button type="button" onclick="toggleTranslation('${uid}')" class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] bg-brand-lightLavender text-brand-purple font-bold border border-brand-lavender/50 hover:bg-brand-purple hover:text-white transition-all shadow-xs" title="Translate / Traducir">
+                        🌐 EN
+                    </button>
+                    <span id="${uid}" class="hidden block translation-text mt-0.5 text-brand-purple/90 font-sans font-normal">
+                        ${enText}
+                    </span>
+                </span>
+            `;
+        }
+
+        function toggleTranslation(id) {
+            playSound('click');
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function fireConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#8B6FC0', '#B8A1E3', '#E7B8D8', '#FFF1C9']
+                });
+            }
+        }
+
+        function showFeedbackModal(title, body, type = 'info') {
+            const modal = document.getElementById('feedback-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalIcon = document.getElementById('modal-icon');
+
+            modalTitle.innerText = title;
+            modalBody.innerText = body;
+
+            if (type === 'success') {
+                playSound('correct');
+                modalIcon.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3 bg-emerald-100 text-emerald-600 font-bold text-2xl";
+                modalIcon.innerHTML = "✓";
+            } else if (type === 'error') {
+                playSound('incorrect');
+                modalIcon.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3 bg-pink-100 text-pink-600 font-bold text-2xl";
+                modalIcon.innerHTML = "✕";
+            } else {
+                playSound('click');
+                modalIcon.className = "w-12 h-12 rounded-full mx-auto flex items-center justify-center mb-3 bg-brand-lightLavender text-brand-purple font-bold text-2xl";
+                modalIcon.innerHTML = "ℹ";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            playSound('click');
+            document.getElementById('feedback-modal').classList.add('hidden');
+        }
+
+        function goToScreen(screenNum) {
+            playSound('click');
+            state.currentScreen = screenNum;
+            renderCurrentScreen();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextScreen() {
+            if (state.currentScreen < state.totalScreens) {
+                goToScreen(state.currentScreen + 1);
+            }
+        }
+
+        function prevScreen() {
+            if (state.currentScreen > 1) {
+                goToScreen(state.currentScreen - 1);
+            }
+        }
+
+        function updateNavigationUI() {
+            const stepLabel = document.getElementById('screen-step-label');
+            const percentLabel = document.getElementById('progress-percent');
+            const progressBar = document.getElementById('progress-bar');
+            
+            const pct = Math.round((state.currentScreen / state.totalScreens) * 100);
+            stepLabel.innerText = `Pantalla ${state.currentScreen} de ${state.totalScreens}`;
+            percentLabel.innerText = `${pct}%`;
+            progressBar.style.width = `${pct}%`;
+
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            btnPrev.disabled = (state.currentScreen === 1);
+            
+            if (state.currentScreen === state.totalScreens) {
+                btnNext.style.display = 'none';
+            } else {
+                btnNext.style.display = 'flex';
+            }
+        }
+
+        function renderCurrentScreen() {
+            updateNavigationUI();
+            const container = document.getElementById('app-container');
+            container.style.opacity = 0;
+
+            setTimeout(() => {
+                switch(state.currentScreen) {
+                    case 1: container.innerHTML = getScreen1HTML(); break;
+                    case 2: container.innerHTML = getScreen2HTML(); initScreen2Logic(); break;
+                    case 3: container.innerHTML = getScreen3HTML(); initScreen3Logic(); break;
+                    case 4: container.innerHTML = getScreen4HTML(); initScreen4Logic(); break;
+                    case 5: container.innerHTML = getScreen5HTML(); break;
+                    case 6: container.innerHTML = getScreen6HTML(); initScreen6Logic(); break;
+                    case 7: container.innerHTML = getScreen7HTML(); initScreen7Logic(); break;
+                    case 8: container.innerHTML = getScreen8HTML(); initScreen8Logic(); break;
+                    case 9: container.innerHTML = getScreen9HTML(); initScreen9Logic(); break;
+                    case 10: container.innerHTML = getScreen10HTML(); initScreen10Logic(); break;
+                    case 11: container.innerHTML = getScreen11HTML(); initScreen11Logic(); break;
+                    case 12: container.innerHTML = getScreen12HTML(); initScreen12Logic(); break;
+                    case 13: container.innerHTML = getScreen13HTML(); fireConfetti(); break;
+                }
+                container.style.opacity = 1;
+            }, 150);
+        }
+
+        function getScreen1HTML() {
+            return `
+                <div class="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto py-4">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border-2 border-brand-lavender/50 w-full">
+                        <span class="inline-block px-3 py-1 bg-brand-lightLavender text-brand-purple text-xs font-extrabold rounded-full mb-3 uppercase tracking-wider border border-brand-lavender/40">
+                            Español A1 • Lección Interactiva
+                        </span>
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-plum font-heading leading-tight mb-2">
+                            ¿Cómo te mueves por la ciudad?
+                        </h1>
+                        <p class="text-lg text-brand-purple font-medium mb-1">
+                            Aprende a decir adónde vas, qué transporte tomas y cómo viajas.
+                        </p>
+                        <p class="text-sm text-brand-plum/70 italic">
+                            Learn how to say where you are going, which transportation you take and how you travel.
+                        </p>
+                    </div>
+
+                    <div class="w-full bg-gradient-to-br from-brand-lightLavender via-white to-brand-cream/40 rounded-3xl p-6 border-2 border-brand-lavender/30 card-shadow">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 mb-6">
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('el bus')">
+                                <span class="text-3xl mb-1">🚌</span>
+                                <span class="text-xs font-bold text-brand-plum">el bus</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('el taxi')">
+                                <span class="text-3xl mb-1">🚕</span>
+                                <span class="text-xs font-bold text-brand-plum">el taxi</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('la moto')">
+                                <span class="text-3xl mb-1">🛵</span>
+                                <span class="text-xs font-bold text-brand-plum">la moto</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('la bicicleta')">
+                                <span class="text-3xl mb-1">🚲</span>
+                                <span class="text-xs font-bold text-brand-plum">la bicicleta</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('el avión')">
+                                <span class="text-3xl mb-1">✈️</span>
+                                <span class="text-xs font-bold text-brand-plum">el avión</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform cursor-pointer" onclick="speakSpanish('a pie')">
+                                <span class="text-3xl mb-1">🚶‍♀️</span>
+                                <span class="text-xs font-bold text-brand-plum">a pie</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl border border-brand-lavender/40 shadow-xs flex flex-col items-center hover:scale-105 transition-transform col-span-2 sm:col-span-1 cursor-pointer" onclick="speakSpanish('Lima, Perú')">
+                                <span class="text-3xl mb-1">🏙️</span>
+                                <span class="text-xs font-bold text-brand-purple">Lima, Perú</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl p-5 border border-brand-lavender/40 text-left">
+                            <h3 class="text-sm font-bold text-brand-purple uppercase tracking-wider mb-3 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Objetivos de la lección / Learning Objectives
+                            </h3>
+                            <ul class="space-y-2 text-sm sm:text-base text-brand-plum">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brand-purple font-bold">1.</span>
+                                    <span>${renderTranslatableText("Decir cómo vas a diferentes lugares de la ciudad.", "Say how you go to different places in the city.")}</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brand-purple font-bold">2.</span>
+                                    <span>${renderTranslatableText("Hablar sobre los medios de transporte que tomas.", "Talk about the transportation you take.")}</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brand-purple font-bold">3.</span>
+                                    <span>${renderTranslatableText("Explicar cómo viajas a otra ciudad o país.", "Explain how you travel to another city or country.")}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button onclick="goToScreen(2)" class="px-10 py-4 bg-brand-purple hover:bg-brand-plum text-white font-extrabold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 animate-pulse-glow flex items-center gap-3">
+                        <span>EMPEZAR</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </button>
+                </div>
+            `;
+        }
+
+        function getScreen2HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Repaso: ¿Dónde están los lugares?
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Mira el mapa y completa las oraciones.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-4">
+                            Look at the map and complete the sentences.
+                        </p>
+
+                        <!-- Cleaned Lima Map without preposition hints -->
+                        <div class="relative bg-gradient-to-br from-emerald-50 via-teal-50 to-brand-lightLavender p-4 rounded-2xl border-2 border-brand-lavender/60 min-h-[280px] mb-6 overflow-x-auto">
+                            <div class="text-xs font-bold text-brand-purple/70 uppercase tracking-widest mb-3 flex items-center gap-1">
+                                🗺️ MAPA VIRTUAL DE LIMA
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-bold">
+                                <div class="bg-white p-3 rounded-xl border-2 border-brand-purple shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🏨</span>
+                                    <span class="text-brand-plum">Hotel</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-blue-400 shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🚉</span>
+                                    <span class="text-brand-plum">Estación del Metropolitano</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-amber-400 shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🚏</span>
+                                    <span class="text-brand-plum">Parada de bus</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-emerald-400 shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🌳</span>
+                                    <span class="text-brand-plum">Parque Kennedy</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-pink-400 shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🍽️</span>
+                                    <span class="text-brand-plum">Restaurante</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-purple-400 shadow-xs flex flex-col items-center text-center justify-center">
+                                    <span class="text-2xl mb-1">🏛️</span>
+                                    <span class="text-brand-plum">Centro Histórico</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border-2 border-indigo-400 shadow-xs flex flex-col items-center text-center justify-center col-span-2 md:col-span-2">
+                                    <span class="text-2xl mb-1">✈️</span>
+                                    <span class="text-brand-plum">Aeropuerto Jorge Chávez</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Word Bank -->
+                        <div class="mb-6 bg-brand-lightLavender p-4 rounded-xl border border-brand-lavender/50">
+                            <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block mb-2">
+                                Banco de palabras / Word bank (Haz clic para seleccionar)
+                            </span>
+                            <div class="flex flex-wrap gap-2" id="word-bank-s2">
+                                <button onclick="selectWordBank('al lado del')" class="wb-btn px-3 py-1.5 bg-white border border-brand-purple text-brand-purple rounded-lg text-sm font-bold shadow-xs hover:bg-brand-purple hover:text-white transition-all">al lado del</button>
+                                <button onclick="selectWordBank('delante del')" class="wb-btn px-3 py-1.5 bg-white border border-brand-purple text-brand-purple rounded-lg text-sm font-bold shadow-xs hover:bg-brand-purple hover:text-white transition-all">delante del</button>
+                                <button onclick="selectWordBank('lejos del')" class="wb-btn px-3 py-1.5 bg-white border border-brand-purple text-brand-purple rounded-lg text-sm font-bold shadow-xs hover:bg-brand-purple hover:text-white transition-all">lejos del</button>
+                                <button onclick="selectWordBank('entre')" class="wb-btn px-3 py-1.5 bg-white border border-brand-purple text-brand-purple rounded-lg text-sm font-bold shadow-xs hover:bg-brand-purple hover:text-white transition-all">entre</button>
+                                <button onclick="selectWordBank('cerca de')" class="wb-btn px-3 py-1.5 bg-white border border-brand-purple text-brand-purple rounded-lg text-sm font-bold shadow-xs hover:bg-brand-purple hover:text-white transition-all">cerca de</button>
+                            </div>
+                        </div>
+
+                        <!-- Sentences Exercises -->
+                        <div class="space-y-4 text-sm sm:text-base">
+                            <div class="p-3 rounded-xl border border-brand-lavender/40 bg-brand-bg flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="s2-q1-box">
+                                <div class="flex-1">
+                                    <span class="font-bold text-brand-purple">1.</span>
+                                    <span>La estación está</span>
+                                    <input type="text" id="s2-ans-1" placeholder="..." class="mx-2 px-3 py-1 rounded-lg border-2 border-brand-lavender focus:border-brand-purple outline-none font-bold text-brand-purple w-36 text-center">
+                                    <span>el hotel.</span>
+                                    <div class="text-xs text-brand-plum/60 italic mt-0.5">The station is [next to] the hotel.</div>
+                                </div>
+                                <span id="s2-feedback-1" class="text-xs font-bold px-2 py-1 rounded hidden"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl border border-brand-lavender/40 bg-brand-bg flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="s2-q2-box">
+                                <div class="flex-1">
+                                    <span class="font-bold text-brand-purple">2.</span>
+                                    <span>El restaurante está</span>
+                                    <input type="text" id="s2-ans-3" placeholder="..." class="mx-2 px-3 py-1 rounded-lg border-2 border-brand-lavender focus:border-brand-purple outline-none font-bold text-brand-purple w-36 text-center">
+                                    <span>el parque.</span>
+                                    <div class="text-xs text-brand-plum/60 italic mt-0.5">The restaurant is [in front of] the park.</div>
+                                </div>
+                                <span id="s2-feedback-3" class="text-xs font-bold px-2 py-1 rounded hidden"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl border border-brand-lavender/40 bg-brand-bg flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="s2-q3-box">
+                                <div class="flex-1">
+                                    <span class="font-bold text-brand-purple">3.</span>
+                                    <span>El aeropuerto está</span>
+                                    <input type="text" id="s2-ans-5" placeholder="..." class="mx-2 px-3 py-1 rounded-lg border-2 border-brand-lavender focus:border-brand-purple outline-none font-bold text-brand-purple w-36 text-center">
+                                    <span>el centro histórico.</span>
+                                    <div class="text-xs text-brand-plum/60 italic mt-0.5">The airport is [far from] the historic center.</div>
+                                </div>
+                                <span id="s2-feedback-5" class="text-xs font-bold px-2 py-1 rounded hidden"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl border border-brand-lavender/40 bg-brand-bg flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="s2-q4-box">
+                                <div class="flex-1">
+                                    <span class="font-bold text-brand-purple">4.</span>
+                                    <span>La parada de bus está</span>
+                                    <input type="text" id="s2-ans-7" placeholder="..." class="mx-2 px-3 py-1 rounded-lg border-2 border-brand-lavender focus:border-brand-purple outline-none font-bold text-brand-purple w-36 text-center">
+                                    <span>el hotel y el restaurante.</span>
+                                    <div class="text-xs text-brand-plum/60 italic mt-0.5">The bus stop is [between] the hotel and restaurant.</div>
+                                </div>
+                                <span id="s2-feedback-7" class="text-xs font-bold px-2 py-1 rounded hidden"></span>
+                            </div>
+
+                            <div class="p-3 rounded-xl border border-brand-lavender/40 bg-brand-bg flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="s2-q5-box">
+                                <div class="flex-1">
+                                    <span class="font-bold text-brand-purple">5.</span>
+                                    <span>El hotel está</span>
+                                    <input type="text" id="s2-ans-9" placeholder="..." class="mx-2 px-3 py-1 rounded-lg border-2 border-brand-lavender focus:border-brand-purple outline-none font-bold text-brand-purple w-36 text-center">
+                                    <span>la estación.</span>
+                                    <div class="text-xs text-brand-plum/60 italic mt-0.5">The hotel is [near] the station.</div>
+                                </div>
+                                <span id="s2-feedback-9" class="text-xs font-bold px-2 py-1 rounded hidden"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <button onclick="checkScreen2()" class="w-full sm:w-auto px-8 py-3 bg-brand-purple hover:bg-brand-plum text-white font-bold rounded-xl shadow-md transition-all">
+                                VERIFICAR RESPUESTAS / CHECK ANSWERS
+                            </button>
+                            <div id="s2-transition-msg" class="hidden text-sm font-bold text-emerald-700 bg-emerald-50 border border-emerald-300 p-3 rounded-xl">
+                                🌟 ¡Excelente! Ya sabes dónde están los lugares. Ahora aprenderás cómo ir hasta ellos.<br>
+                                <span class="text-xs font-normal italic text-emerald-600">You already know where the places are. Now you will learn how to get to them.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let selectedWbWord = '';
+        function selectWordBank(word) {
+            playSound('click');
+            selectedWbWord = word;
+            showFeedbackModal("Palabra seleccionada: " + word, "Haz clic en el campo donde deseas colocarla.\nClick on the input box where you want to insert it.", "info");
+        }
+
+        function initScreen2Logic() {
+            [1, 3, 5, 7, 9].forEach(id => {
+                const inp = document.getElementById(`s2-ans-${id}`);
+                if (inp) {
+                    if (state.screen2Answers[id]) inp.value = state.screen2Answers[id];
+                    inp.addEventListener('click', () => {
+                        if (selectedWbWord) {
+                            inp.value = selectedWbWord;
+                            selectedWbWord = '';
+                        }
+                    });
+                }
+            });
+        }
+
+        function normalizeStr(str) {
+            return (str || '').toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function checkScreen2() {
+            const correctAnswers = {
+                1: ['al lado del', 'al lado'],
+                3: ['delante del', 'delante'],
+                5: ['lejos del', 'lejos'],
+                7: ['entre'],
+                9: ['cerca de', 'al lado de']
+            };
+
+            let allCorrect = true;
+
+            [1, 3, 5, 7, 9].forEach(id => {
+                const inp = document.getElementById(`s2-ans-${id}`);
+                const val = inp.value;
+                state.screen2Answers[id] = val;
+                const box = document.getElementById(`s2-q${Math.ceil(id/2)}-box`);
+                const fb = document.getElementById(`s2-feedback-${id}`);
+
+                const attempts = (state.screenAttempts[2][id] || 0) + 1;
+                state.screenAttempts[2][id] = attempts;
+
+                const isRight = correctAnswers[id].includes(normalizeStr(val));
+
+                if (isRight) {
+                    box.className = "p-3 rounded-xl border-2 border-emerald-400 bg-emerald-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2";
+                    fb.className = "text-xs font-bold px-2 py-1 rounded bg-emerald-200 text-emerald-800";
+                    fb.innerText = "¡Correcto!";
+                    fb.classList.remove('hidden');
+                } else {
+                    allCorrect = false;
+                    box.className = "p-3 rounded-xl border-2 border-brand-pink bg-brand-lightPink flex flex-col sm:flex-row sm:items-center justify-between gap-2";
+                    fb.className = "text-xs font-bold px-2 py-1 rounded bg-pink-200 text-pink-800";
+                    if (attempts >= 2) {
+                        fb.innerText = `Respuesta: ${correctAnswers[id][0]}`;
+                        fb.classList.remove('hidden');
+                    } else {
+                        fb.innerText = "Revisa la preposición";
+                        fb.classList.remove('hidden');
+                    }
+                }
+            });
+
+            if (allCorrect) {
+                playSound('correct');
+                fireConfetti();
+                document.getElementById('s2-transition-msg').classList.remove('hidden');
+            } else {
+                playSound('incorrect');
+                showFeedbackModal("Revisa algunas respuestas", "Asegúrate de colocar la preposición correcta según el mapa.\nCheck your prepositions based on the map.", "error");
+            }
+        }
+
+        function getScreen3HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Vocabulario: Medios de transporte
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Relaciona cada imagen con el medio de transporte correcto.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-4">
+                            Match each image with the correct means of transportation.
+                        </p>
+
+                        <div id="matching-container" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6"></div>
+
+                        <div id="flashcards-section" class="hidden mt-8 pt-6 border-t-2 border-brand-lavender/40 space-y-4">
+                            <h3 class="text-lg font-bold text-brand-purple font-heading flex items-center gap-2">
+                                💡 Tarjetas interactivas de uso / Interactive Flashcards
+                            </h3>
+                            <p class="text-xs text-brand-plum/70">
+                                Haz clic en cada transporte para ver oraciones de ejemplo y escuchar su pronunciación.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="flashcards-grid"></div>
+                        </div>
+
+                        <div class="mt-6 flex justify-between items-center">
+                            <button id="btn-check-s3" onclick="checkScreen3()" class="px-8 py-3 bg-brand-purple hover:bg-brand-plum text-white font-bold rounded-xl shadow-md transition-all">
+                                VERIFICAR / VERIFY
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const transportItems = [
+            { id: 'bus', emoji: '🚌', es: 'el bus', en: 'the bus', sentence: 'Voy al trabajo en bus.', sentenceEn: 'I go to work by bus.' },
+            { id: 'taxi', emoji: '🚕', es: 'el taxi', en: 'the taxi', sentence: 'Tomo un taxi para ir al aeropuerto.', sentenceEn: 'I take a taxi to go to the airport.' },
+            { id: 'moto', emoji: '🛵', es: 'la moto', en: 'the motorcycle', sentence: 'Voy a la universidad en moto.', sentenceEn: 'I go to university by motorcycle.' },
+            { id: 'carro', emoji: '🚗', es: 'el carro', en: 'the car', sentence: 'Viajo en carro con mi familia.', sentenceEn: 'I travel by car with my family.' },
+            { id: 'bici', emoji: '🚲', es: 'la bicicleta', en: 'the bicycle', sentence: 'Voy al parque en bicicleta.', sentenceEn: 'I go to the park by bicycle.' },
+            { id: 'avion', emoji: '✈️', es: 'el avión', en: 'the airplane', sentence: 'Viajo en avión a otro país.', sentenceEn: 'I travel by airplane to another country.' },
+            { id: 'barco', emoji: '🛳️', es: 'el barco', en: 'the boat / ship', sentence: 'Viajamos en barco por el lago.', sentenceEn: 'We travel by boat on the lake.' },
+            { id: 'apie', emoji: '🚶‍♂️', es: 'a pie', en: 'on foot / walking', sentence: 'Voy al centro comercial a pie.', sentenceEn: 'I go to the shopping mall on foot.' }
+        ];
+
+        function initScreen3Logic() {
+            const container = document.getElementById('matching-container');
+            container.innerHTML = '';
+
+            transportItems.forEach(item => {
+                const selectedVal = state.screen3Matched[item.id] || '';
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl border-2 border-brand-lavender/60 card-shadow flex flex-col items-center justify-between text-center space-y-2";
+                card.id = `s3-card-${item.id}`;
+                card.innerHTML = `
+                    <div class="text-4xl py-2 cursor-pointer" onclick="speakSpanish('${item.es}')">${item.emoji}</div>
+                    <select id="s3-select-${item.id}" onchange="state.screen3Matched['${item.id}'] = this.value" class="w-full px-2 py-1.5 rounded-lg border-2 border-brand-lavender text-xs font-bold text-brand-purple bg-brand-lightLavender focus:outline-none">
+                        <option value="">Selecciona... / Select...</option>
+                        ${transportItems.map(t => `<option value="${t.id}" ${selectedVal === t.id ? 'selected' : ''}>${t.es}</option>`).join('')}
+                    </select>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function checkScreen3() {
+            let correctCount = 0;
+            transportItems.forEach(item => {
+                const sel = document.getElementById(`s3-select-${item.id}`);
+                const card = document.getElementById(`s3-card-${item.id}`);
+                if (sel.value === item.id) {
+                    correctCount++;
+                    card.className = "bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-400 shadow-sm flex flex-col items-center justify-between text-center space-y-2";
+                } else {
+                    card.className = "bg-pink-50 p-4 rounded-2xl border-2 border-pink-400 shadow-sm flex flex-col items-center justify-between text-center space-y-2";
+                }
+            });
+
+            if (correctCount === transportItems.length) {
+                playSound('correct');
+                fireConfetti();
+                showFlashcardsSection();
+                showFeedbackModal("¡Excelente!", "Has relacionado todos los medios de transporte correctamente.", "success");
+            } else {
+                playSound('incorrect');
+                showFeedbackModal("Atención", "Revisa tus combinaciones y vuelve a intentarlo.", "error");
+            }
+        }
+
+        function showFlashcardsSection() {
+            const sec = document.getElementById('flashcards-section');
+            const grid = document.getElementById('flashcards-grid');
+            if (!sec || !grid) return;
+
+            sec.classList.remove('hidden');
+            grid.innerHTML = '';
+
+            transportItems.forEach(item => {
+                const fc = document.createElement('div');
+                fc.className = "bg-white p-4 rounded-xl border border-brand-lavender/60 card-shadow hover:scale-102 transition-all cursor-pointer";
+                fc.onclick = () => speakSpanish(item.es + '. ' + item.sentence);
+                fc.innerHTML = `
+                    <div class="flex items-center space-x-3 mb-2">
+                        <span class="text-3xl">${item.emoji}</span>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-brand-purple text-base block">${item.es}</span>
+                                <button type="button" onclick="speakSpanish('${item.es}', event)" class="text-xs p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200" title="Escuchar">🔊</button>
+                            </div>
+                            <span class="text-xs text-brand-plum/60 italic">${item.en}</span>
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-brand-lavender/30 text-xs">
+                        ${renderTranslatableText(item.sentence, item.sentenceEn)}
+                    </div>
+                `;
+                grid.appendChild(fc);
+            });
+        }
+
+        function getScreen4HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Tus preferencias
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Completa las frases y después explica tus respuestas oralmente.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-4">
+                            Complete the sentences and then explain your answers aloud.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-brand-lightLavender/50 p-4 rounded-2xl border border-brand-lavender/50 space-y-2">
+                                <label class="text-sm font-bold text-brand-plum block">
+                                    1. A mí me gusta ir en...
+                                </label>
+                                <select id="s4-pref-1" onchange="state.screen4Prefs.transportLike = this.value" class="w-full p-2.5 rounded-xl border border-brand-lavender bg-white text-sm font-semibold text-brand-purple focus:outline-none">
+                                    <option value="">-- Elige un transporte --</option>
+                                    <option value="bus">bus</option>
+                                    <option value="taxi">taxi</option>
+                                    <option value="moto">moto</option>
+                                    <option value="carro">carro</option>
+                                    <option value="bicicleta">bicicleta</option>
+                                    <option value="avión">avión</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/50 p-4 rounded-2xl border border-brand-lavender/50 space-y-2">
+                                <label class="text-sm font-bold text-brand-plum block">
+                                    2. A mí no me gusta ir en...
+                                </label>
+                                <select id="s4-pref-2" onchange="state.screen4Prefs.transportDislike = this.value" class="w-full p-2.5 rounded-xl border border-brand-lavender bg-white text-sm font-semibold text-brand-purple focus:outline-none">
+                                    <option value="">-- Elige un transporte --</option>
+                                    <option value="bus">bus</option>
+                                    <option value="taxi">taxi</option>
+                                    <option value="moto">moto</option>
+                                    <option value="carro">carro</option>
+                                    <option value="bicicleta">bicicleta</option>
+                                    <option value="avión">avión</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/50 p-4 rounded-2xl border border-brand-lavender/50 space-y-2">
+                                <label class="text-sm font-bold text-brand-plum block">
+                                    3. En mi ciudad hay...
+                                </label>
+                                <input type="text" id="s4-pref-3" oninput="state.screen4Prefs.inCityHas = this.value" placeholder="ej. buses y metros..." class="w-full p-2.5 rounded-xl border border-brand-lavender bg-white text-sm font-semibold text-brand-purple focus:outline-none">
+                            </div>
+
+                            <div class="bg-brand-lightLavender/50 p-4 rounded-2xl border border-brand-lavender/50 space-y-2">
+                                <label class="text-sm font-bold text-brand-plum block">
+                                    4. En mi ciudad no hay...
+                                </label>
+                                <input type="text" id="s4-pref-4" oninput="state.screen4Prefs.inCityNoHas = this.value" placeholder="ej. tranvía, tren..." class="w-full p-2.5 rounded-xl border border-brand-lavender bg-white text-sm font-semibold text-brand-purple focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-brand-purple/10 to-brand-pink/20 p-5 rounded-2xl border-2 border-brand-purple/30 space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🗣️</span>
+                                <div>
+                                    <h3 class="font-bold text-brand-plum text-base font-heading">¡Práctica Oral! / Speaking Practice</h3>
+                                    <p class="text-xs text-brand-plum/80">Lee tus frases en voz alta y explica el porqué usando las frases de apoyo.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-brand-lavender/40 space-y-2">
+                                <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block">
+                                    Frases de apoyo / Support phrases (Haz clic para ver traducción)
+                                </span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                                    <div class="p-2 bg-brand-lightLavender rounded-lg border border-brand-lavender/30">
+                                        ${renderTranslatableText("Me gusta porque es cómodo.", "I like it because it is comfortable.")}
+                                    </div>
+                                    <div class="p-2 bg-brand-lightLavender rounded-lg border border-brand-lavender/30">
+                                        ${renderTranslatableText("No me gusta porque es lento.", "I don't like it because it is slow.")}
+                                    </div>
+                                    <div class="p-2 bg-brand-lightLavender rounded-lg border border-brand-lavender/30">
+                                        ${renderTranslatableText("Es barato, pero está lleno.", "It is cheap, but it is full.")}
+                                    </div>
+                                    <div class="p-2 bg-brand-lightLavender rounded-lg border border-brand-lavender/30">
+                                        ${renderTranslatableText("Es rápido, pero es caro.", "It is fast, but it is expensive.")}
+                                    </div>
+                                    <div class="p-2 bg-brand-lightLavender rounded-lg border border-brand-lavender/30 sm:col-span-2">
+                                        ${renderTranslatableText("Es ecológico, pero puede ser peligroso.", "It is eco-friendly, but it can be dangerous.")}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 flex justify-end">
+                                <button onclick="markScreen4OralDone()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    <span>YA RESPONDÍ / I ANSWERED</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initScreen4Logic() {
+            if (state.screen4Prefs.transportLike) document.getElementById('s4-pref-1').value = state.screen4Prefs.transportLike;
+            if (state.screen4Prefs.transportDislike) document.getElementById('s4-pref-2').value = state.screen4Prefs.transportDislike;
+            if (state.screen4Prefs.inCityHas) document.getElementById('s4-pref-3').value = state.screen4Prefs.inCityHas;
+            if (state.screen4Prefs.inCityNoHas) document.getElementById('s4-pref-4').value = state.screen4Prefs.inCityNoHas;
+        }
+
+        function markScreen4OralDone() {
+            playSound('correct');
+            showFeedbackModal("¡Excelente producción oral!", "Puedes continuar a la siguiente pantalla.\nYou can proceed to the next screen.", "success");
+        }
+
+        function getScreen5HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Descubre la gramática: Ir, viajar o tomar
+                        </h2>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Discover the grammar rules for using Ir, Viajar, and Tomar.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-brand-lightLavender/40 rounded-2xl p-4 border-2 border-brand-lavender flex flex-col justify-between space-y-4">
+                                <div class="text-center">
+                                    <span class="inline-block px-3 py-1 bg-brand-purple text-white text-xs font-bold rounded-full mb-3">
+                                        VERBO 1: IR
+                                    </span>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs mb-3 space-y-2">
+                                        <div class="text-3xl">🏛️</div>
+                                        <div class="text-xs font-bold text-brand-plum">
+                                            ${renderTranslatableText("Voy al centro histórico.", "I go to the historic center.")}
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs space-y-2">
+                                        <div class="text-3xl">🚕</div>
+                                        <div class="text-xs font-bold text-brand-purple">
+                                            ${renderTranslatableText("Voy en taxi.", "I go by taxi.")}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-brand-lavender/50 text-xs text-brand-plum space-y-1">
+                                    <p>• <strong>Ir a + lugar</strong> → indica el destino.</p>
+                                    <p>• <strong>Ir en + transporte</strong> → indica cómo te desplazas.</p>
+                                    <p>• <strong>Ir a pie</strong> → significa caminar.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 rounded-2xl p-4 border-2 border-brand-pink flex flex-col justify-between space-y-4">
+                                <div class="text-center">
+                                    <span class="inline-block px-3 py-1 bg-pink-500 text-white text-xs font-bold rounded-full mb-3">
+                                        VERBO 2: VIAJAR
+                                    </span>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs mb-3 space-y-2">
+                                        <div class="text-3xl">🧳⛰️</div>
+                                        <div class="text-xs font-bold text-brand-plum">
+                                            ${renderTranslatableText("Viajo a Cusco.", "I travel to Cusco.")}
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs space-y-2">
+                                        <div class="text-3xl">✈️</div>
+                                        <div class="text-xs font-bold text-pink-600">
+                                            ${renderTranslatableText("Viajo en avión.", "I travel by airplane.")}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-brand-lavender/50 text-xs text-brand-plum space-y-1">
+                                    <p>• <strong>Viajar a + ciudad/país</strong> → indica el destino del viaje.</p>
+                                    <p>• <strong>Viajar en + transporte</strong> → indica cómo realizas el viaje.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 rounded-2xl p-4 border-2 border-indigo-300 flex flex-col justify-between space-y-4">
+                                <div class="text-center">
+                                    <span class="inline-block px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-full mb-3">
+                                        VERBO 3: TOMAR
+                                    </span>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs mb-3 space-y-2">
+                                        <div class="text-3xl">🚌</div>
+                                        <div class="text-xs font-bold text-brand-plum">
+                                            ${renderTranslatableText("Tomo el bus.", "I take the bus.")}
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-xl border border-brand-lavender/40 shadow-xs space-y-2">
+                                        <div class="text-3xl">🙋‍♀️🚕</div>
+                                        <div class="text-xs font-bold text-indigo-600">
+                                            ${renderTranslatableText("Tomo un taxi.", "I take a taxi.")}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-brand-lavender/50 text-xs text-brand-plum space-y-1">
+                                    <p>• <strong>Tomar + artículo + transporte</strong> → significa usar o subir a un transporte.</p>
+                                    <p>• <span class="text-pink-600 font-bold">¡Ojo!</span> No usamos <em>"en"</em> después de tomar.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Conjugation Table -->
+                        <div class="bg-white rounded-2xl border-2 border-brand-lavender p-5 card-shadow overflow-x-auto">
+                            <h3 class="text-base font-bold text-brand-purple font-heading mb-3 flex items-center gap-2">
+                                📊 Tabla de conjugación / Conjugation Table
+                            </h3>
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-brand-lightLavender text-brand-purple">
+                                        <th class="p-3 font-extrabold rounded-l-xl">Pronombre</th>
+                                        <th class="p-3 font-extrabold">IR</th>
+                                        <th class="p-3 font-extrabold">VIAJAR</th>
+                                        <th class="p-3 font-extrabold rounded-r-xl">TOMAR</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-lavender/30 text-brand-plum font-medium">
+                                    <tr>
+                                        <td class="p-3 font-bold text-brand-purple">Yo</td>
+                                        <td class="p-3">voy</td>
+                                        <td class="p-3">viajo</td>
+                                        <td class="p-3">tomo</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-brand-purple">Tú</td>
+                                        <td class="p-3">vas</td>
+                                        <td class="p-3">viajas</td>
+                                        <td class="p-3">tomas</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-brand-purple">Él / Ella / Usted</td>
+                                        <td class="p-3">va</td>
+                                        <td class="p-3">viaja</td>
+                                        <td class="p-3">toma</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-brand-purple">Nosotros / Nosotras</td>
+                                        <td class="p-3">vamos</td>
+                                        <td class="p-3">viajamos</td>
+                                        <td class="p-3">tomamos</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-brand-purple">Ellos / Ellas / Ustedes</td>
+                                        <td class="p-3">van</td>
+                                        <td class="p-3">viajan</td>
+                                        <td class="p-3">toman</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getScreen6HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Elige la estructura correcta
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Mira la imagen y elige la oración correcta.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Look at the image and choose the correct sentence.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="s6-questions-grid"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const screen6Questions = [
+            { id: 1, img: '🛫🏛️', title: 'Persona con destino al aeropuerto', options: ['Voy al aeropuerto.', 'Voy en aeropuerto.', 'Tomo al aeropuerto.'], correct: 0, explain: 'Usamos "ir a + lugar" para indicar el destino. (Ir a + el = al).' },
+            { id: 2, img: '🚕🏻', title: 'Persona dentro de un taxi', options: ['Voy en taxi.', 'Voy a taxi.', 'Tomo en taxi.'], correct: 0, explain: 'Usamos "ir en + medio de transporte" para indicar cómo te desplazas.' },
+            { id: 3, img: '🚌🚶‍♀️', title: 'Persona subiendo a un bus', options: ['Tomo el bus.', 'Tomo en el bus.', 'Viajo al bus.'], correct: 0, explain: 'Usamos "tomar + artículo + transporte". No se usa "en" con el verbo tomar.' },
+            { id: 4, img: '🚶‍♂️🌳', title: 'Persona caminando al parque', options: ['Voy al parque a pie.', 'Voy en pie al parque.', 'Tomo a pie.'], correct: 0, explain: 'Para decir walking, usamos la expresión fija "a pie".' },
+            { id: 5, img: '✈️⛰️', title: 'Persona viajando a Cusco en avión', options: ['Viajo a Cusco en avión.', 'Viajo en Cusco al avión.', 'Tomo Cusco en avión.'], correct: 0, explain: 'Viajar a + destino + en + transporte.' },
+            { id: 6, img: '🙋‍♀️🚕', title: 'Persona llamando a un taxi', options: ['Tomo un taxi.', 'Tomo en taxi.', 'Voy a un taxi.'], correct: 0, explain: 'Tomar un taxi = to take a taxi.' }
+        ];
+
+        function initScreen6Logic() {
+            const grid = document.getElementById('s6-questions-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            screen6Questions.forEach(q => {
+                const selectedOpt = state.screen6Answers[q.id];
+                const card = document.createElement('div');
+                card.className = "bg-brand-lightLavender/30 p-4 rounded-2xl border-2 border-brand-lavender/60 flex flex-col justify-between space-y-3";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center space-x-3 mb-2">
+                            <span class="text-3xl">${q.img}</span>
+                            <div>
+                                <span class="text-xs font-bold text-brand-purple">SITUACIÓN ${q.id}</span>
+                                <h4 class="text-sm font-bold text-brand-plum">${q.title}</h4>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mt-3">
+                            ${q.options.map((opt, idx) => `
+                                <button onclick="selectScreen6Answer(${q.id}, ${idx})" id="s6-opt-${q.id}-${idx}" class="w-full text-left p-2.5 rounded-xl border border-brand-lavender bg-white hover:bg-brand-lightLavender transition-all text-xs font-semibold text-brand-plum flex items-center justify-between ${selectedOpt === idx ? 'border-brand-purple bg-brand-lightLavender' : ''}">
+                                    <span>${opt}</span>
+                                    <button type="button" onclick="speakSpanish('${opt}', event)" class="px-1.5 py-0.5 rounded text-[10px] bg-amber-100 text-amber-900 border border-amber-300 font-bold">🔊</button>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div id="s6-exp-${q.id}" class="hidden p-2.5 rounded-xl text-xs font-medium"></div>
+                `;
+                grid.appendChild(card);
+
+                if (selectedOpt !== undefined) {
+                    evaluateScreen6Question(q.id, selectedOpt);
+                }
+            });
+        }
+
+        function selectScreen6Answer(qId, optIdx) {
+            playSound('click');
+            state.screen6Answers[qId] = optIdx;
+            evaluateScreen6Question(qId, optIdx);
+        }
+
+        function evaluateScreen6Question(qId, optIdx) {
+            const q = screen6Questions.find(item => item.id === qId);
+            const expDiv = document.getElementById(`s6-exp-${qId}`);
+            const attempts = (state.screenAttempts[6][qId] || 0) + 1;
+            state.screenAttempts[6][qId] = attempts;
+
+            if (optIdx === q.correct) {
+                expDiv.className = "p-2.5 rounded-xl text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 block";
+                expDiv.innerText = "¡Correcto! " + q.explain;
+            } else {
+                expDiv.className = "p-2.5 rounded-xl text-xs font-semibold bg-pink-100 text-pink-800 border border-pink-300 block";
+                if (attempts >= 2) {
+                    expDiv.innerText = `Incorrecto. Respuesta correcta: "${q.options[q.correct]}". Explicación: ${q.explain}`;
+                } else {
+                    expDiv.innerText = "Respuesta incorrecta. Revisa la regla gramatical e inténtalo de nuevo.";
+                }
+            }
+        }
+
+        function getScreen7HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Ventajas y desventajas
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Observa los transportes, escribe oraciones en los cuadros de texto y describe una ventaja y desventaja usando "pero".
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-4">
+                            Look at the transport options, type your answers in the text boxes, and describe an advantage and disadvantage using "pero".
+                        </p>
+
+                        <div class="bg-brand-cream/60 p-4 rounded-xl border border-amber-200 mb-6 text-xs text-brand-plum space-y-1">
+                            <span class="font-bold text-amber-800 block text-sm">💡 CONECTOR "PERO" / CONNECTOR "BUT"</span>
+                            <p>Usamos <strong>"pero"</strong> para conectar dos ideas diferentes. / We use <em>"pero"</em> to connect two contrasting ideas.</p>
+                            <p class="italic text-brand-purple">Ejemplo: El taxi es cómodo, <strong>pero</strong> es caro.</p>
+                        </div>
+
+                        <div class="bg-brand-lightLavender/40 p-4 rounded-xl border border-brand-lavender mb-6">
+                            <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block mb-2">
+                                🏷️ Banco de adjetivos / Adjectives Bank
+                            </span>
+                            <div class="flex flex-wrap gap-1.5 text-xs">
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('barato y caro')">barato / caro 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('rápido y lento')">rápido / lento 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('cómodo e incómodo')">cómodo / incómodo 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('seguro y peligroso')">seguro / peligroso 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('ecológico y contaminante')">ecológico / contaminante 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('tranquilo y estresante')">tranquilo / estresante 🔊</span>
+                                <span class="px-2.5 py-1 bg-white border border-brand-lavender rounded-lg text-brand-plum font-semibold cursor-pointer" onclick="speakSpanish('lleno y vacío')">lleno / vacío 🔊</span>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Builder -->
+                        <div class="bg-brand-lightLavender/30 p-5 rounded-2xl border-2 border-brand-lavender space-y-5 mb-6">
+                            <h3 class="text-sm font-bold text-brand-purple uppercase tracking-wider">
+                                🛠️ Constructor interactivo / Sentence Builder
+                            </h3>
+
+                            <div>
+                                <span class="text-xs font-bold text-brand-plum block mb-1">1. Elige un transporte:</span>
+                                <div class="flex flex-wrap gap-2" id="s7-transports">
+                                    <button onclick="selectS7Transport('El taxi')" class="s7-t-btn px-3 py-1.5 rounded-lg border border-brand-purple bg-white text-brand-purple text-xs font-bold hover:bg-brand-purple hover:text-white transition-all">El taxi</button>
+                                    <button onclick="selectS7Transport('El bus')" class="s7-t-btn px-3 py-1.5 rounded-lg border border-brand-purple bg-white text-brand-purple text-xs font-bold hover:bg-brand-purple hover:text-white transition-all">El bus</button>
+                                    <button onclick="selectS7Transport('La bicicleta')" class="s7-t-btn px-3 py-1.5 rounded-lg border border-brand-purple bg-white text-brand-purple text-xs font-bold hover:bg-brand-purple hover:text-white transition-all">La bicicleta</button>
+                                    <button onclick="selectS7Transport('Ir a pie')" class="s7-t-btn px-3 py-1.5 rounded-lg border border-brand-purple bg-white text-brand-purple text-xs font-bold hover:bg-brand-purple hover:text-white transition-all">Ir a pie</button>
+                                    <button onclick="selectS7Transport('El avión')" class="s7-t-btn px-3 py-1.5 rounded-lg border border-brand-purple bg-white text-brand-purple text-xs font-bold hover:bg-brand-purple hover:text-white transition-all">El avión</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <span class="text-xs font-bold text-brand-plum block mb-1">2. Primer adjetivo (Ventaja):</span>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <button onclick="selectS7Adj1('cómodo')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">cómodo</button>
+                                        <button onclick="selectS7Adj1('barato')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">barato</button>
+                                        <button onclick="selectS7Adj1('rápido')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">rápido</button>
+                                        <button onclick="selectS7Adj1('ecológico')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">ecológico</button>
+                                        <button onclick="selectS7Adj1('seguro')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">seguro</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-xs font-bold text-brand-plum block mb-1">3. Segundo adjetivo (Desventaja):</span>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <button onclick="selectS7Adj2('caro')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">caro</button>
+                                        <button onclick="selectS7Adj2('lento')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">lento</button>
+                                        <button onclick="selectS7Adj2('peligroso')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">peligroso</button>
+                                        <button onclick="selectS7Adj2('estresante')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">estresante</button>
+                                        <button onclick="selectS7Adj2('lleno')" class="px-2 py-1 bg-white border border-brand-lavender text-brand-plum rounded text-xs font-medium hover:border-brand-purple">lleno</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border-2 border-brand-purple text-center space-y-2 card-shadow">
+                                <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block">Tu oración seleccionada / Selected sentence</span>
+                                <div class="flex items-center justify-center gap-2">
+                                    <p id="s7-sentence-result" class="text-lg font-bold text-brand-plum font-heading">
+                                        [Selecciona las opciones arriba...]
+                                    </p>
+                                    <button type="button" onclick="speakS7BuiltSentence()" class="p-1.5 rounded-lg bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200" title="Escuchar">🔊</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Typing Answers Boxes -->
+                        <div class="bg-white p-5 rounded-2xl border-2 border-brand-purple/40 space-y-4 card-shadow mb-6">
+                            <h3 class="text-base font-bold text-brand-plum font-heading flex items-center gap-2">
+                                ✍️ Escribe tus oraciones para cada transporte / Type sentences for each transport
+                            </h3>
+                            <p class="text-xs text-brand-plum/70">
+                                Escribe una ventaja y una desventaja usando "pero" en cada cuadro de texto.
+                            </p>
+
+                            <div class="space-y-4 text-xs sm:text-sm">
+                                <div class="bg-brand-bg p-3.5 rounded-xl border border-brand-lavender/60 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <label for="s7-input-taxi" class="font-bold text-brand-purple flex items-center gap-1.5">
+                                            <span>🚕 El taxi</span>
+                                        </label>
+                                        <button type="button" onclick="toggleS7Sample('taxi')" class="text-[11px] font-bold text-brand-purple hover:underline">💡 Ver respuesta de ejemplo</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="s7-input-taxi" placeholder="Ej: El taxi es cómodo, pero es caro." oninput="saveS7Typed('taxi', this.value)" class="flex-1 p-2.5 rounded-xl border-2 border-brand-lavender focus:border-brand-purple outline-none font-medium text-brand-plum">
+                                        <button type="button" onclick="speakS7Typed('taxi')" class="px-2.5 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200 text-xs" title="Escuchar">🔊</button>
+                                    </div>
+                                    <div id="s7-sample-taxi" class="hidden p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 text-xs italic">
+                                        <strong>Respuesta posible:</strong> "El taxi es cómodo, pero es caro."
+                                    </div>
+                                </div>
+
+                                <div class="bg-brand-bg p-3.5 rounded-xl border border-brand-lavender/60 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <label for="s7-input-bus" class="font-bold text-brand-purple flex items-center gap-1.5">
+                                            <span>🚌 El bus</span>
+                                        </label>
+                                        <button type="button" onclick="toggleS7Sample('bus')" class="text-[11px] font-bold text-brand-purple hover:underline">💡 Ver respuesta de ejemplo</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="s7-input-bus" placeholder="Ej: El bus es barato, pero está lleno." oninput="saveS7Typed('bus', this.value)" class="flex-1 p-2.5 rounded-xl border-2 border-brand-lavender focus:border-brand-purple outline-none font-medium text-brand-plum">
+                                        <button type="button" onclick="speakS7Typed('bus')" class="px-2.5 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200 text-xs" title="Escuchar">🔊</button>
+                                    </div>
+                                    <div id="s7-sample-bus" class="hidden p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 text-xs italic">
+                                        <strong>Respuesta posible:</strong> "El bus es barato, pero está lleno."
+                                    </div>
+                                </div>
+
+                                <div class="bg-brand-bg p-3.5 rounded-xl border border-brand-lavender/60 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <label for="s7-input-bici" class="font-bold text-brand-purple flex items-center gap-1.5">
+                                            <span>🚲 La bicicleta</span>
+                                        </label>
+                                        <button type="button" onclick="toggleS7Sample('bici')" class="text-[11px] font-bold text-brand-purple hover:underline">💡 Ver respuesta de ejemplo</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="s7-input-bici" placeholder="Ej: La bicicleta es ecológica, pero puede ser peligrosa." oninput="saveS7Typed('bici', this.value)" class="flex-1 p-2.5 rounded-xl border-2 border-brand-lavender focus:border-brand-purple outline-none font-medium text-brand-plum">
+                                        <button type="button" onclick="speakS7Typed('bici')" class="px-2.5 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200 text-xs" title="Escuchar">🔊</button>
+                                    </div>
+                                    <div id="s7-sample-bici" class="hidden p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 text-xs italic">
+                                        <strong>Respuesta posible:</strong> "La bicicleta es ecológica, pero puede ser peligrosa."
+                                    </div>
+                                </div>
+
+                                <div class="bg-brand-bg p-3.5 rounded-xl border border-brand-lavender/60 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <label for="s7-input-apie" class="font-bold text-brand-purple flex items-center gap-1.5">
+                                            <span>🚶‍♂️ Ir a pie</span>
+                                        </label>
+                                        <button type="button" onclick="toggleS7Sample('apie')" class="text-[11px] font-bold text-brand-purple hover:underline">💡 Ver respuesta de ejemplo</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="s7-input-apie" placeholder="Ej: Ir a pie es barato, pero es lento." oninput="saveS7Typed('apie', this.value)" class="flex-1 p-2.5 rounded-xl border-2 border-brand-lavender focus:border-brand-purple outline-none font-medium text-brand-plum">
+                                        <button type="button" onclick="speakS7Typed('apie')" class="px-2.5 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200 text-xs" title="Escuchar">🔊</button>
+                                    </div>
+                                    <div id="s7-sample-apie" class="hidden p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 text-xs italic">
+                                        <strong>Respuesta posible:</strong> "Ir a pie es barato, pero es lento."
+                                    </div>
+                                </div>
+
+                                <div class="bg-brand-bg p-3.5 rounded-xl border border-brand-lavender/60 space-y-2">
+                                    <div class="flex items-center justify-between">
+                                        <label for="s7-input-avion" class="font-bold text-brand-purple flex items-center gap-1.5">
+                                            <span>✈️ El avión</span>
+                                        </label>
+                                        <button type="button" onclick="toggleS7Sample('avion')" class="text-[11px] font-bold text-brand-purple hover:underline">💡 Ver respuesta de ejemplo</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="s7-input-avion" placeholder="Ej: El avión es rápido, pero es caro." oninput="saveS7Typed('avion', this.value)" class="flex-1 p-2.5 rounded-xl border-2 border-brand-lavender focus:border-brand-purple outline-none font-medium text-brand-plum">
+                                        <button type="button" onclick="speakS7Typed('avion')" class="px-2.5 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200 text-xs" title="Escuchar">🔊</button>
+                                    </div>
+                                    <div id="s7-sample-avion" class="hidden p-2 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-300 text-xs italic">
+                                        <strong>Respuesta posible:</strong> "El avión es rápido, pero es caro."
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 bg-gradient-to-r from-brand-purple/10 to-brand-pink/20 p-4 rounded-2xl border border-brand-purple/30">
+                            <span class="text-xs font-bold text-brand-plum">
+                                🗣️ ¡Lee tus oraciones en voz alta! / Read your sentences aloud!
+                            </span>
+                            <button onclick="markScreen7OralDone()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all text-xs flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span>YA RESPONDÍ / I ANSWERED</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initScreen7Logic() {
+            updateS7Sentence();
+            if (state.screen7TypedAnswers) {
+                ['taxi', 'bus', 'bici', 'apie', 'avion'].forEach(key => {
+                    const input = document.getElementById(`s7-input-${key}`);
+                    if (input && state.screen7TypedAnswers[key]) {
+                        input.value = state.screen7TypedAnswers[key];
+                    }
+                });
+            }
+        }
+
+        function saveS7Typed(key, value) {
+            if (!state.screen7TypedAnswers) state.screen7TypedAnswers = {};
+            state.screen7TypedAnswers[key] = value;
+        }
+
+        function speakS7Typed(key) {
+            const val = state.screen7TypedAnswers?.[key] || document.getElementById(`s7-input-${key}`)?.value;
+            if (val && val.trim()) {
+                speakSpanish(val);
+            } else {
+                showFeedbackModal("Atención", "Escribe una oración para poder escucharla.\nPlease type a sentence first.", "info");
+            }
+        }
+
+        function toggleS7Sample(key) {
+            playSound('click');
+            const el = document.getElementById(`s7-sample-${key}`);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function selectS7Transport(val) {
+            playSound('click');
+            state.screen7Selected.transport = val;
+            updateS7Sentence();
+        }
+
+        function selectS7Adj1(val) {
+            playSound('click');
+            state.screen7Selected.adj1 = val;
+            updateS7Sentence();
+        }
+
+        function selectS7Adj2(val) {
+            playSound('click');
+            state.screen7Selected.adj2 = val;
+            updateS7Sentence();
+        }
+
+        function updateS7Sentence() {
+            const res = document.getElementById('s7-sentence-result');
+            if (!res) return;
+            const t = state.screen7Selected.transport;
+            const a1 = state.screen7Selected.adj1;
+            const a2 = state.screen7Selected.adj2;
+
+            if (t && a1 && a2) {
+                res.innerText = `${t} es ${a1}, pero es ${a2}.`;
+            } else {
+                res.innerText = "[Selecciona las opciones arriba / Select options above...]";
+            }
+        }
+
+        function speakS7BuiltSentence() {
+            const res = document.getElementById('s7-sentence-result')?.innerText;
+            if (res && !res.includes('[')) {
+                speakSpanish(res);
+            } else {
+                showFeedbackModal("Atención", "Selecciona las tres opciones arriba para armar la frase.\nSelect all options above first.", "info");
+            }
+        }
+
+        function markScreen7OralDone() {
+            playSound('correct');
+            showFeedbackModal("¡Excelente trabajo escrito y oral!", "Has practicado tus oraciones con 'pero'. Puedes continuar.", "success");
+        }
+
+        function getScreen8HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Forma la oración
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Ordena las palabras y forma una oración. Después, léela en voz alta.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Put the words in order and form a sentence. Then read it aloud.
+                        </p>
+
+                        <div class="space-y-6" id="s8-sentences-container"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const screen8Data = [
+            { id: 1, prompt: 'yo / ir / centro / taxi', words: ['Voy', 'al', 'centro', 'en', 'taxi.'], target: 'Voy al centro en taxi.' },
+            { id: 2, prompt: 'tú / ir / trabajo / bus', words: ['Vas', 'al', 'trabajo', 'en', 'bus.'], target: 'Vas al trabajo en bus.' },
+            { id: 3, prompt: 'ella / tomar / taxi', words: ['Ella', 'toma', 'un', 'taxi.'], target: 'Ella toma un taxi.' },
+            { id: 4, prompt: 'nosotros / viajar / Cusco / avión', words: ['Viajamos', 'a', 'Cusco', 'en', 'avión.'], target: 'Viajamos a Cusco en avión.' },
+            { id: 5, prompt: 'ellos / ir / restaurante / a pie', words: ['Van', 'al', 'restaurante', 'a', 'pie.'], target: 'Van al restaurante a pie.' },
+            { id: 6, prompt: 'yo / tomar / bus / centro histórico', words: ['Tomo', 'el', 'bus', 'para', 'ir', 'al', 'centro', 'histórico.'], target: 'Tomo el bus para ir al centro histórico.' }
+        ];
+
+        function initScreen8Logic() {
+            const container = document.getElementById('s8-sentences-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            screen8Data.forEach(item => {
+                if (!state.screen8Formed[item.id]) {
+                    state.screen8Formed[item.id] = [];
+                }
+
+                // Shuffle words initially if empty
+                const pool = [...item.words].sort(() => 0.5 - Math.random());
+
+                const box = document.createElement('div');
+                box.className = "bg-brand-lightLavender/30 p-4 rounded-2xl border-2 border-brand-lavender/60 space-y-3";
+                box.id = `s8-box-${item.id}`;
+
+                box.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-brand-purple">EJERCICIO ${item.id}: <span class="text-brand-plum">${item.prompt}</span></span>
+                        <button type="button" onclick="speakSpanish('${item.target}')" class="px-2 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded font-bold text-xs" title="Escuchar">🔊</button>
+                    </div>
+
+                    <!-- Selected Words Zone -->
+                    <div id="s8-selected-${item.id}" class="min-h-[48px] bg-white p-2.5 rounded-xl border-2 border-dashed border-brand-lavender flex flex-wrap gap-2 items-center">
+                        <span class="text-xs text-brand-plum/40 italic">Haz clic en las palabras de abajo para formar la oración...</span>
+                    </div>
+
+                    <!-- Available Word Cards -->
+                    <div id="s8-pool-${item.id}" class="flex flex-wrap gap-2 pt-1">
+                        ${pool.map((w, idx) => `
+                            <button onclick="addWordS8(${item.id}, '${w.replace(/'/g, "\\'")}', this)" class="px-3 py-1.5 bg-white border-2 border-brand-purple/40 hover:border-brand-purple text-brand-plum text-xs font-bold rounded-lg shadow-xs hover:bg-brand-lightLavender transition-all">
+                                ${w}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between pt-2">
+                        <button onclick="resetS8(${item.id})" class="text-xs text-brand-purple font-semibold hover:underline">Reiniciar / Reset</button>
+                        <button onclick="checkS8(${item.id})" class="px-4 py-1.5 bg-brand-purple text-white text-xs font-bold rounded-lg shadow-xs hover:bg-brand-plum">Verificar / Check</button>
+                    </div>
+                    <div id="s8-fb-${item.id}" class="hidden text-xs font-bold p-2 rounded-lg"></div>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        function addWordS8(id, word, btnEl) {
+            playSound('click');
+            btnEl.classList.add('hidden');
+            if (!state.screen8Formed[id]) state.screen8Formed[id] = [];
+            state.screen8Formed[id].push({ word, el: btnEl });
+            renderS8Selected(id);
+        }
+
+        function renderS8Selected(id) {
+            const container = document.getElementById(`s8-selected-${id}`);
+            if (!container) return;
+            const items = state.screen8Formed[id] || [];
+
+            if (items.length === 0) {
+                container.innerHTML = `<span class="text-xs text-brand-plum/40 italic">Haz clic en las palabras de abajo para formar la oración...</span>`;
+                return;
+            }
+
+            container.innerHTML = items.map((item, idx) => `
+                <span onclick="removeWordS8(${id}, ${idx})" class="px-3 py-1.5 bg-brand-purple text-white text-xs font-bold rounded-lg shadow-xs cursor-pointer hover:bg-pink-600 transition-all flex items-center gap-1">
+                    <span>${item.word}</span>
+                    <span class="text-[10px]">✕</span>
+                </span>
+            `).join('');
+        }
+
+        function removeWordS8(id, idx) {
+            playSound('click');
+            const removed = state.screen8Formed[id].splice(idx, 1)[0];
+            if (removed && removed.el) removed.el.classList.remove('hidden');
+            renderS8Selected(id);
+        }
+
+        function resetS8(id) {
+            playSound('click');
+            if (state.screen8Formed[id]) {
+                state.screen8Formed[id].forEach(item => item.el.classList.remove('hidden'));
+                state.screen8Formed[id] = [];
+            }
+            renderS8Selected(id);
+            const fb = document.getElementById(`s8-fb-${id}`);
+            if (fb) fb.classList.add('hidden');
+        }
+
+        function checkS8(id) {
+            const item = screen8Data.find(s => s.id === id);
+            const formedStr = (state.screen8Formed[id] || []).map(x => x.word).join(' ');
+            const fb = document.getElementById(`s8-fb-${id}`);
+
+            if (formedStr === item.target) {
+                playSound('correct');
+                fb.className = "text-xs font-bold p-2 rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300 block";
+                fb.innerText = "¡Correcto! Lee la oración en voz alta: \"" + item.target + "\"";
+                speakSpanish(item.target);
+            } else {
+                playSound('incorrect');
+                fb.className = "text-xs font-bold p-2 rounded-lg bg-pink-100 text-pink-800 border border-pink-300 block";
+                fb.innerText = `Inténtalo de nuevo. Respuesta correcta: "${item.target}"`;
+            }
+        }
+
+        function getScreen9HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Un viaje por Perú
+                        </h2>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Read the passage and answer the comprehension questions.
+                        </p>
+
+                        <!-- Reading Paragraphs -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <div class="text-3xl">🏨🚉</div>
+                                <div class="text-xs sm:text-sm text-brand-plum space-y-1">
+                                    ${renderTranslatableText("Emma está en un hotel de Miraflores.", "Emma is in a hotel in Miraflores.")}<br>
+                                    ${renderTranslatableText("El hotel está cerca de una estación del Metropolitano.", "The hotel is near a Metropolitano station.")}<br>
+                                    ${renderTranslatableText("Por la mañana, Emma va a pie hasta la estación y toma el Metropolitano para ir al centro histórico.", "In the morning, Emma goes on foot to the station and takes the Metropolitano to go to the historic center.")}
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <div class="text-3xl">🚕✈️</div>
+                                <div class="text-xs sm:text-sm text-brand-plum space-y-1">
+                                    ${renderTranslatableText("Por la tarde, quiere ir al aeropuerto.", "In the afternoon, she wants to go to the airport.")}<br>
+                                    ${renderTranslatableText("El aeropuerto está lejos, por eso toma un taxi.", "The airport is far, so she takes a taxi.")}<br>
+                                    ${renderTranslatableText("En el aeropuerto, toma un avión y viaja a Cusco.", "At the airport, she takes a plane and travels to Cusco.")}
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <div class="text-3xl">⛰️🚶‍♀️</div>
+                                <div class="text-xs sm:text-sm text-brand-plum space-y-1">
+                                    ${renderTranslatableText("En Cusco, su alojamiento está cerca de la Plaza de Armas.", "In Cusco, her accommodation is near Plaza de Armas.")}<br>
+                                    ${renderTranslatableText("No necesita tomar un taxi porque va a pie.", "She doesn't need to take a taxi because she goes on foot.")}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Questions -->
+                        <div class="space-y-4 bg-brand-bg p-4 rounded-2xl border border-brand-lavender/60 mb-6">
+                            <h3 class="font-bold text-brand-purple text-sm">Comprensión de lectura / Comprehension Questions</h3>
+
+                            <div class="space-y-3 text-xs sm:text-sm">
+                                <div>
+                                    <p class="font-bold text-brand-plum">1. ¿Dónde está el hotel de Emma?</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button onclick="ansS9(1, 'Miraflores')" class="s9-opt-1 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">En Miraflores</button>
+                                        <button onclick="ansS9(1, 'Cusco')" class="s9-opt-1 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">En Cusco</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-brand-plum">2. ¿Cómo va Emma hasta la estación?</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button onclick="ansS9(2, 'A pie')" class="s9-opt-2 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">A pie</button>
+                                        <button onclick="ansS9(2, 'En taxi')" class="s9-opt-2 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">En taxi</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-brand-plum">3. ¿Qué transporte toma para ir al centro histórico?</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button onclick="ansS9(3, 'El Metropolitano')" class="s9-opt-3 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">El Metropolitano</button>
+                                        <button onclick="ansS9(3, 'Un taxi')" class="s9-opt-3 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">Un taxi</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-brand-plum">4. ¿Por qué toma un taxi para ir al aeropuerto?</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button onclick="ansS9(4, 'Porque está lejos')" class="s9-opt-4 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">Porque está lejos</button>
+                                        <button onclick="ansS9(4, 'Porque está cerca')" class="s9-opt-4 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">Porque está cerca</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-brand-plum">5. ¿Adónde viaja en avión?</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button onclick="ansS9(5, 'A Cusco')" class="s9-opt-5 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">A Cusco</button>
+                                        <button onclick="ansS9(5, 'A Miraflores')" class="s9-opt-5 px-3 py-1 bg-white border rounded-lg hover:bg-brand-lightLavender">A Miraflores</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visual Route -->
+                        <div class="bg-white p-4 rounded-xl border-2 border-brand-purple text-center space-y-2">
+                            <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block">Ruta del viaje / Travel Route</span>
+                            <div class="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-bold text-brand-plum">
+                                <span class="p-2 bg-brand-lightLavender rounded-lg">🏨 Hotel</span>
+                                <span>➔</span>
+                                <span class="p-2 bg-brand-lightLavender rounded-lg">🚉 Estación</span>
+                                <span>➔</span>
+                                <span class="p-2 bg-brand-lightLavender rounded-lg">🏛️ Centro Histórico</span>
+                                <span>➔</span>
+                                <span class="p-2 bg-brand-lightLavender rounded-lg">✈️ Aeropuerto</span>
+                                <span>➔</span>
+                                <span class="p-2 bg-brand-lightLavender rounded-lg">⛰️ Cusco</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initScreen9Logic() {}
+
+        function ansS9(qNum, choice) {
+            playSound('click');
+            state.screen9Answers[qNum] = choice;
+            const correctOpts = { 1: 'Miraflores', 2: 'A pie', 3: 'El Metropolitano', 4: 'Porque está lejos', 5: 'A Cusco' };
+            if (choice === correctOpts[qNum]) {
+                playSound('correct');
+            } else {
+                playSound('incorrect');
+            }
+        }
+
+        function getScreen10HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Hablemos de ti
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Responde las preguntas oralmente. Usa las frases de apoyo si las necesitas.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Answer the questions aloud. Use the support phrases if you need them.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <!-- Q1 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 1</span>
+                                        <button type="button" onclick="speakSpanish('¿Cómo vas normalmente al trabajo?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("¿Cómo vas normalmente al trabajo?", "How do you normally go to work?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-1" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p>${renderTranslatableText("Normally I go to work by...", "Normally I go to work by...")}</p>
+                                    <p class="italic text-brand-purple">"Normalmente voy al trabajo en..."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(1)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(1)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+
+                            <!-- Q2 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 2</span>
+                                        <button type="button" onclick="speakSpanish('¿Qué transporte tomas con más frecuencia?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("¿Qué transporte tomas con más frecuencia?", "Which transport do you take most frequently?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-2" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p class="italic text-brand-purple">"Tomo [el bus / el taxi / la bicicleta] cuando..."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(2)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(2)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+
+                            <!-- Q3 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 3</span>
+                                        <button type="button" onclick="speakSpanish('¿Cuándo prefieres tomar un taxi?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("¿Cuándo prefieres tomar un taxi?", "When do you prefer to take a taxi?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-3" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p class="italic text-brand-purple">"Prefiero tomar un taxi cuando es de noche o tengo prisa."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(3)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(3)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+
+                            <!-- Q4 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 4</span>
+                                        <button type="button" onclick="speakSpanish('¿Qué transporte es cómodo, pero caro?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("¿Qué transporte es cómodo, pero caro?", "Which transport is comfortable, but expensive?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-4" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p class="italic text-brand-purple">"El taxi es cómodo, pero caro."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(4)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(4)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+
+                            <!-- Q5 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 5</span>
+                                        <button type="button" onclick="speakSpanish('¿Qué transporte es barato, pero incómodo?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("¿Qué transporte es barato, pero incómodo?", "Which transport is cheap, but uncomfortable?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-5" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p class="italic text-brand-purple">"El bus es barato, pero..."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(5)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(5)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+
+                            <!-- Q6 -->
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-bold text-brand-purple">PREGUNTA 6</span>
+                                        <button type="button" onclick="speakSpanish('Cuando viajas a otra ciudad o país, ¿cómo prefieres viajar? ¿Por qué?')" class="p-1 rounded bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs">🔊</button>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-brand-plum">
+                                        ${renderTranslatableText("Cuando viajas a otra ciudad o país, ¿cómo prefieres viajar? ¿Por qué?", "When you travel to another city or country, how do you prefer to travel? Why?")}
+                                    </h4>
+                                </div>
+                                <div id="s10-help-6" class="hidden text-xs bg-white p-2.5 rounded-xl border border-brand-lavender space-y-1">
+                                    <p class="font-bold text-brand-purple">Frase de apoyo:</p>
+                                    <p class="italic text-brand-purple">"Prefiero viajar en [avión / bus / carro] porque..."</p>
+                                </div>
+                                <div class="flex justify-between items-center pt-2">
+                                    <button onclick="toggleS10Help(6)" class="text-xs font-bold text-brand-purple hover:underline">MOSTRAR AYUDA</button>
+                                    <button onclick="markS10OralDone(6)" class="px-3 py-1 bg-emerald-600 text-white font-bold rounded-lg text-xs">YA RESPONDÍ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initScreen10Logic() {}
+
+        function toggleS10Help(num) {
+            playSound('click');
+            const help = document.getElementById(`s10-help-${num}`);
+            if (help) help.classList.toggle('hidden');
+        }
+
+        function markS10OralDone(num) {
+            playSound('correct');
+            showFeedbackModal("¡Excelente respuesta!", "Has completado la respuesta oral para esta pregunta.", "success");
+        }
+
+        function getScreen11HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Roleplay: Una turista en Perú
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Simula una conversación real con una persona local en Lima.
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-4">
+                            You are at a hotel in Miraflores. You want to visit the historic center and then travel to Cusco. Ask how to get there.
+                        </p>
+
+                        <!-- Chat Simulation Box -->
+                        <div class="bg-brand-lightLavender/20 p-4 rounded-2xl border-2 border-brand-lavender space-y-4 mb-6 min-h-[320px] flex flex-col justify-between" id="s11-chat-box">
+                            <div class="space-y-3" id="s11-messages">
+                                <!-- Chat Bubbles -->
+                            </div>
+
+                            <div id="s11-controls" class="pt-3 border-t border-brand-lavender/40">
+                                <!-- Options dynamically injected -->
+                            </div>
+                        </div>
+
+                        <!-- Free Oral Summary Task -->
+                        <div id="s11-final-oral" class="hidden bg-gradient-to-r from-brand-purple/10 to-brand-pink/20 p-5 rounded-2xl border-2 border-brand-purple/30 space-y-3">
+                            <h3 class="font-bold text-brand-plum text-sm font-heading">🗣️ ¡Producción oral libre! / Free oral task</h3>
+                            <p class="text-xs text-brand-plum/80">Ahora explica la ruta completa con tus propias palabras. / Now explain the complete route in your own words.</p>
+                            
+                            <div class="bg-white p-3 rounded-xl text-xs space-y-1">
+                                <span class="font-bold text-brand-purple block">Frases de apoyo:</span>
+                                <p>• "Primero, estoy en..."</p>
+                                <p>• "Después, voy a..."</p>
+                                <p>• "Voy en..." / "Tomo..."</p>
+                                <p>• "Finalmente, viajo a... en..."</p>
+                            </div>
+
+                            <button onclick="markS11RoleplayFinished()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md">
+                                YA RESPONDÍ / I ANSWERED
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const roleplayTurns = [
+            {
+                speaker: 'Turista (Tú)',
+                text: 'Disculpe, ¿me puede ayudar?',
+                en: 'Excuse me, can you help me?',
+                type: 'auto'
+            },
+            {
+                speaker: 'Persona Local',
+                text: '¡Hola! Claro, ¿adónde quiere ir?',
+                en: 'Hello! Sure, where do you want to go?',
+                type: 'auto'
+            },
+            {
+                speaker: 'Turista (Tú)',
+                type: 'choice',
+                options: [
+                    { text: 'Quiero ir al centro histórico. ¿Qué transporte puedo tomar?', en: 'I want to go to the historic center. What transport can I take?' }
+                ]
+            },
+            {
+                speaker: 'Persona Local',
+                text: 'Puede tomar el Metropolitano. La estación está al lado del hotel.',
+                en: 'You can take the Metropolitano. The station is next to the hotel.',
+                type: 'auto'
+            },
+            {
+                speaker: 'Turista (Tú)',
+                type: 'choice',
+                options: [
+                    { text: '¿Puedo ir a pie hasta la estación?', en: 'Can I go on foot to the station?' }
+                ]
+            },
+            {
+                speaker: 'Persona Local',
+                text: 'Sí, está muy cerca. Después va en Metropolitano al centro.',
+                en: 'Yes, it is very close. Then you go by Metropolitano to the center.',
+                type: 'auto'
+            },
+            {
+                speaker: 'Turista (Tú)',
+                type: 'choice',
+                options: [
+                    { text: 'Por la tarde quiero ir al aeropuerto. ¿Cómo voy?', en: 'In the afternoon I want to go to the airport. How do I go?' }
+                ]
+            },
+            {
+                speaker: 'Persona Local',
+                text: 'Puede tomar un taxi porque el aeropuerto está lejos.',
+                en: 'You can take a taxi because the airport is far.',
+                type: 'auto'
+            },
+            {
+                speaker: 'Turista (Tú)',
+                type: 'choice',
+                options: [
+                    { text: 'En el aeropuerto tomo un avión y viajo a Cusco.', en: 'At the airport I take a plane and travel to Cusco.' }
+                ]
+            }
+        ];
+
+        function initScreen11Logic() {
+            state.screen11Turn = 0;
+            renderRoleplay();
+        }
+
+        function renderRoleplay() {
+            const msgBox = document.getElementById('s11-messages');
+            const ctrlBox = document.getElementById('s11-controls');
+            if (!msgBox || !ctrlBox) return;
+
+            msgBox.innerHTML = '';
+
+            for (let i = 0; i <= state.screen11Turn && i < roleplayTurns.length; i++) {
+                const turn = roleplayTurns[i];
+                if (turn.text) {
+                    const isUser = turn.speaker.includes('Turista');
+                    const bubble = document.createElement('div');
+                    bubble.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'}`;
+                    bubble.innerHTML = `
+                        <span class="text-[10px] font-bold text-brand-purple mb-0.5">${turn.speaker}</span>
+                        <div class="p-3 rounded-2xl max-w-xs sm:max-w-md ${isUser ? 'bg-brand-purple text-white rounded-tr-none' : 'bg-white text-brand-plum border border-brand-lavender/60 rounded-tl-none'} shadow-xs text-xs sm:text-sm">
+                            ${renderTranslatableText(turn.text, turn.en)}
+                        </div>
+                    `;
+                    msgBox.appendChild(bubble);
+                }
+            }
+
+            const current = roleplayTurns[state.screen11Turn];
+            if (current && current.type === 'choice') {
+                ctrlBox.innerHTML = `
+                    <span class="text-xs font-bold text-brand-purple block mb-2">Elige tu respuesta:</span>
+                    <div class="space-y-2">
+                        ${current.options.map((opt, idx) => `
+                            <button onclick="chooseRoleplayTurn('${opt.text.replace(/'/g, "\\'")}', '${opt.en.replace(/'/g, "\\'")}')" class="w-full text-left p-2.5 rounded-xl border-2 border-brand-purple bg-white hover:bg-brand-lightLavender text-xs font-bold text-brand-purple">
+                                ${opt.text}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (current && current.type === 'auto' && state.screen11Turn < roleplayTurns.length - 1) {
+                setTimeout(() => {
+                    state.screen11Turn++;
+                    renderRoleplay();
+                }, 800);
+            } else if (state.screen11Turn >= roleplayTurns.length - 1) {
+                ctrlBox.innerHTML = `<span class="text-xs font-bold text-emerald-700">✓ Diálogo completado. Lee la consigna oral final abajo.</span>`;
+                document.getElementById('s11-final-oral').classList.remove('hidden');
+            }
+        }
+
+        function chooseRoleplayTurn(text, en) {
+            playSound('click');
+            roleplayTurns[state.screen11Turn].text = text;
+            roleplayTurns[state.screen11Turn].en = en;
+            state.screen11Turn++;
+            renderRoleplay();
+        }
+
+        function markS11RoleplayFinished() {
+            playSound('correct');
+            showFeedbackModal("¡Roleplay completado!", "Excelente producción oral del itinerario.", "success");
+        }
+
+        function getScreen12HTML() {
+            return `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-5 border border-brand-lavender/50 card-shadow">
+                        <h2 class="text-2xl font-bold font-heading text-brand-plum mb-1">
+                            Reto final
+                        </h2>
+                        <p class="text-sm font-semibold text-brand-purple">
+                            Explica cómo vas a cada lugar. Usa "ir", "tomar" y "viajar".
+                        </p>
+                        <p class="text-xs text-brand-plum/70 italic mb-6">
+                            Explain how you get to each place. Use "ir," "tomar" and "viajar."
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2 text-center">
+                                <div class="text-3xl">🍽️🏨</div>
+                                <span class="text-xs font-bold text-brand-purple uppercase block">Situación 1</span>
+                                <p class="text-xs font-bold text-brand-plum">El restaurante está al lado del hotel.</p>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2 text-center">
+                                <div class="text-3xl">🏛️📍</div>
+                                <span class="text-xs font-bold text-brand-purple uppercase block">Situación 2</span>
+                                <p class="text-xs font-bold text-brand-plum">El centro histórico está lejos.</p>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2 text-center">
+                                <div class="text-3xl">⛰️✈️</div>
+                                <span class="text-xs font-bold text-brand-purple uppercase block">Situación 3</span>
+                                <p class="text-xs font-bold text-brand-plum">Mañana viajas a Cusco.</p>
+                            </div>
+                        </div>
+
+                        <!-- Hidden Model Response -->
+                        <div class="bg-brand-lightLavender/30 p-5 rounded-2xl border-2 border-brand-purple/40 text-center space-y-4">
+                            <button onclick="toggleS12Model()" class="px-6 py-2.5 bg-brand-purple hover:bg-brand-plum text-white font-bold rounded-xl text-xs shadow-md transition-all">
+                                VER UN EJEMPLO / SEE AN EXAMPLE
+                            </button>
+
+                            <div id="s12-model-box" class="hidden p-4 bg-white rounded-xl border border-brand-lavender space-y-2 text-left">
+                                <span class="text-xs font-bold text-brand-purple uppercase tracking-wider block">Producción modelo:</span>
+                                <p class="text-sm font-bold text-brand-plum">
+                                    "Voy al restaurante a pie porque está cerca. Para ir al centro histórico, tomo el Metropolitano. Mañana tomo un avión y viajo a Cusco."
+                                </p>
+                                <div class="pt-2 flex justify-end">
+                                    <button type="button" onclick="speakSpanish('Voy al restaurante a pie porque está cerca. Para ir al centro histórico, tomo el Metropolitano. Mañana tomo un avión y viajo a Cusco.')" class="px-3 py-1 bg-amber-100 text-amber-900 border border-amber-300 font-bold rounded text-xs flex items-center gap-1">
+                                        <span>Escuchar modelo</span>
+                                        <span>🔊</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initScreen12Logic() {}
+
+        function toggleS12Model() {
+            playSound('click');
+            const box = document.getElementById('s12-model-box');
+            if (box) box.classList.toggle('hidden');
+        }
+
+        function getScreen13HTML() {
+            return `
+                <div class="space-y-6 text-center max-w-4xl mx-auto py-4">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow border-2 border-brand-lavender/50 space-y-4">
+                        <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-full uppercase tracking-wider border border-emerald-300">
+                            🎉 ¡Felicitaciones! / Congratulations!
+                        </span>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-brand-plum font-heading">
+                            ¡Excelente trabajo!
+                        </h1>
+                        <p class="text-sm sm:text-base text-brand-purple font-medium">
+                            Ahora puedes explicar cómo te mueves por la ciudad y cómo viajas a otro lugar.<br>
+                            <span class="text-xs text-brand-plum/70 italic">Now you can explain how you move around the city and how you travel to another place.</span>
+                        </p>
+
+                        <!-- Summary Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left pt-4">
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <span class="font-extrabold text-brand-purple text-xs uppercase block">VERBO IR</span>
+                                <p class="text-xs font-bold text-brand-plum">• IR A + lugar: <span class="font-normal text-brand-purple">Voy al aeropuerto.</span></p>
+                                <p class="text-xs font-bold text-brand-plum">• IR EN + transporte: <span class="font-normal text-brand-purple">Voy en taxi.</span></p>
+                                <p class="text-xs font-bold text-brand-plum">• IR A PIE: <span class="font-normal text-brand-purple">Voy al parque a pie.</span></p>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <span class="font-extrabold text-brand-purple text-xs uppercase block">VERBO VIAJAR</span>
+                                <p class="text-xs font-bold text-brand-plum">• VIAJAR A + destino: <span class="font-normal text-brand-purple">Viajo a Cusco.</span></p>
+                                <p class="text-xs font-bold text-brand-plum">• VIAJAR EN + transporte: <span class="font-normal text-brand-purple">Viajo en avión.</span></p>
+                            </div>
+
+                            <div class="bg-brand-lightLavender/40 p-4 rounded-2xl border border-brand-lavender space-y-2">
+                                <span class="font-extrabold text-brand-purple text-xs uppercase block">VERBO TOMAR</span>
+                                <p class="text-xs font-bold text-brand-plum">• TOMAR + transporte: <span class="font-normal text-brand-purple">Tomo el bus.</span></p>
+                                <p class="text-xs font-bold text-brand-plum">• TOMAR UN TAXI: <span class="font-normal text-brand-purple">Tomo un taxi.</span></p>
+                            </div>
+                        </div>
+
+                        <!-- 3 Action Buttons -->
+                        <div class="pt-6 flex flex-col sm:flex-row justify-center gap-3">
+                            <button onclick="goToScreen(1)" class="px-5 py-3 bg-brand-lightLavender border-2 border-brand-purple text-brand-purple font-bold rounded-xl text-xs hover:bg-brand-purple hover:text-white transition-all">
+                                REPASAR LA CLASE
+                            </button>
+                            <button onclick="goToScreen(11)" class="px-5 py-3 bg-brand-lightLavender border-2 border-brand-purple text-brand-purple font-bold rounded-xl text-xs hover:bg-brand-purple hover:text-white transition-all">
+                                REPETIR EL ROLEPLAY
+                            </button>
+                            <button onclick="showFeedbackModal('¡Lección Finalizada!', '¡Has completado toda la lección con éxito! ¡Sigue practicando!', 'success')" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">
+                                FINALIZAR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Init App on load
+        window.onload = function() {
+            renderCurrentScreen();
+        };
+    </script>
+</body>
+</html>
