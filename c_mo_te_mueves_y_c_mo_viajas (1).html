@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Cómo te mueves y cómo viajas? - Spanish with Jackie</title>
+    
+    <!-- Fonts: Poppins for headings & buttons, Lato for body and instructions -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        appBg: '#FAF8FF',
+                        lavender: '#B8A1E3',
+                        brandPurple: '#8B6FC0',
+                        brandPink: '#E7B8D8',
+                        brandCream: '#FFF1C9',
+                        darkText: '#392D4F',
+                        successGreen: '#3E9B6B',
+                        successBg: '#E9F6EF',
+                        errorOrange: '#E07E5A',
+                        errorBg: '#FDEEE8'
+                    },
+                    fontFamily: {
+                        heading: ['Poppins', 'sans-serif'],
+                        body: ['Lato', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8FF;
+            color: #392D4F;
+            font-family: 'Lato', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        h1, h2, h3, h4, h5, button, .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .pill-btn {
+            border-radius: 9999px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pill-btn:active {
+            transform: scale(0.96);
+        }
+
+        .card-custom {
+            background-color: #FFFFFF;
+            border: 2px solid #B8A1E3;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(139, 111, 192, 0.1);
+        }
+
+        .drop-zone {
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .drop-zone.hovered {
+            background-color: #FFF1C9;
+            border-color: #8B6FC0;
+        }
+
+        .draggable-item {
+            cursor: grab;
+            touch-action: none;
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+
+        .en-translation {
+            display: none;
+        }
+
+        .en-translation.show {
+            display: block;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8FF;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #B8A1E3;
+            border-radius: 4px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-24">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b-2 border-lavender/40 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-[980px] mx-auto px-4 py-3 flex items-center justify-between">
+            <button onclick="confirmGoHome()" class="pill-btn p-2.5 text-brandPurple bg-lavender/20 hover:bg-lavender/40 transition flex items-center gap-2 font-heading font-semibold text-xs sm:text-sm" title="Ir al inicio">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="hidden sm:inline">Inicio</span>
+            </button>
+
+            <div class="text-center cursor-pointer" onclick="confirmGoHome()">
+                <div class="text-xs uppercase font-extrabold tracking-widest text-brandPink font-heading">Spanish with Jackie</div>
+                <h1 class="text-base sm:text-xl font-extrabold text-brandPurple font-heading leading-tight">¿Cómo te mueves y cómo viajas?</h1>
+            </div>
+
+            <button id="btn-sound-toggle" onclick="toggleSound()" class="pill-btn px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-heading font-bold border-2 border-brandPurple text-brandPurple bg-white hover:bg-lavender/20 transition flex items-center gap-1.5">
+                <i id="icon-sound" class="fa-solid fa-volume-high"></i>
+                <span id="text-sound">Sonido: sí</span>
+            </button>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div id="progress-header" class="hidden w-full bg-lavender/20 h-3 relative">
+            <div id="progress-bar-inner" class="bg-brandPurple h-3 transition-all duration-500 w-0"></div>
+            <div class="max-w-[980px] mx-auto px-4 flex justify-end">
+                <span id="progress-counter" class="text-[11px] font-bold text-brandPurple font-heading mt-1 bg-white px-2 py-0.5 rounded-full border border-lavender shadow-sm">
+                    Ejercicio 1 de 9
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-[980px] w-full mx-auto px-4 pt-6 pb-4">
+
+        <!-- WELCOME SCREEN -->
+        <section id="screen-welcome" class="card-custom p-6 sm:p-10 text-center flex flex-col items-center my-4">
+            <span class="text-xs sm:text-sm font-extrabold text-brandPurple bg-lavender/30 px-4 py-1.5 rounded-full font-heading tracking-wider uppercase mb-3">
+                Español A1 · Práctica
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-brandPurple font-heading mb-2">
+                ¿Cómo te mueves y cómo viajas?
+            </h2>
+            <p class="text-base sm:text-xl text-darkText font-medium mb-1">
+                Practica “ir”, “viajar” y “tomar” en situaciones de la vida real.
+            </p>
+            <p class="text-xs sm:text-sm text-gray-500 italic mb-8">
+                Practice “ir,” “viajar” and “tomar” in real-life situations.
+            </p>
+
+            <!-- Illustrated Mosaic Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-2xl mb-8">
+                <div class="bg-lavender/20 p-4 rounded-2xl flex flex-col items-center border border-lavender/50 hover:bg-lavender/30 transition">
+                    <span class="text-4xl mb-1">🚌</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Bus</span>
+                </div>
+                <div class="bg-brandPink/20 p-4 rounded-2xl flex flex-col items-center border border-brandPink/50 hover:bg-brandPink/30 transition">
+                    <span class="text-4xl mb-1">🚕</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Taxi</span>
+                </div>
+                <div class="bg-brandCream p-4 rounded-2xl flex flex-col items-center border border-yellow-300 hover:bg-yellow-200 transition">
+                    <span class="text-4xl mb-1">🛵</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Moto</span>
+                </div>
+                <div class="bg-lavender/20 p-4 rounded-2xl flex flex-col items-center border border-lavender/50 hover:bg-lavender/30 transition">
+                    <span class="text-4xl mb-1">🚗</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Carro</span>
+                </div>
+                <div class="bg-brandPink/20 p-4 rounded-2xl flex flex-col items-center border border-brandPink/50 hover:bg-brandPink/30 transition">
+                    <span class="text-4xl mb-1">🚲</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Bicicleta</span>
+                </div>
+                <div class="bg-brandCream p-4 rounded-2xl flex flex-col items-center border border-yellow-300 hover:bg-yellow-200 transition">
+                    <span class="text-4xl mb-1">✈️</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Avión</span>
+                </div>
+                <div class="bg-lavender/20 p-4 rounded-2xl flex flex-col items-center border border-lavender/50 hover:bg-lavender/30 transition">
+                    <span class="text-4xl mb-1">🛥️</span>
+                    <span class="text-xs font-bold text-darkText font-heading">Barco</span>
+                </div>
+                <div class="bg-brandPink/20 p-4 rounded-2xl flex flex-col items-center border border-brandPink/50 hover:bg-brandPink/30 transition">
+                    <span class="text-4xl mb-1">🚶</span>
+                    <span class="text-xs font-bold text-darkText font-heading">A pie</span>
+                </div>
+            </div>
+
+            <button onclick="startApp()" class="pill-btn px-10 py-4 bg-brandPurple hover:bg-purple-700 text-white font-extrabold text-lg shadow-lg hover:shadow-xl transition flex items-center gap-3">
+                <span>Empezar</span>
+                <i class="fa-solid fa-circle-arrow-right text-xl"></i>
+            </button>
+        </section>
+
+        <!-- EXERCISE CONTAINER WRAPPER -->
+        <section id="exercise-wrapper" class="hidden space-y-4">
+            
+            <!-- Exercise Header Card -->
+            <div class="card-custom p-4 sm:p-6">
+                <div class="flex items-center justify-between border-b border-lavender/30 pb-3 mb-3">
+                    <span id="ex-category-tag" class="text-xs font-extrabold uppercase tracking-wider text-brandPurple bg-lavender/30 px-3 py-1 rounded-full font-heading">
+                        Categoría
+                    </span>
+                    <div class="text-xs font-semibold text-gray-400">Spanish with Jackie</div>
+                </div>
+
+                <!-- Bilingual Instructions -->
+                <div class="bg-lavender/15 p-3.5 rounded-2xl border border-lavender/30">
+                    <p id="ex-instruction-es" class="font-extrabold text-darkText text-base sm:text-lg">
+                        Instrucción en español.
+                    </p>
+                    <p id="ex-instruction-en" class="text-xs sm:text-sm text-gray-500 italic mt-0.5 font-body">
+                        Instruction in English.
+                    </p>
+                </div>
+            </div>
+
+            <!-- DYNAMIC EXERCISE CONTENT AREA -->
+            <div id="exercise-content-area" class="card-custom p-4 sm:p-6 min-h-[360px]">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- FEEDBACK DISPLAY BOX -->
+            <div id="feedback-display-box" class="hidden card-custom p-4 text-center font-bold text-sm transition-all duration-300">
+                <!-- Feedback injected dynamically -->
+            </div>
+
+        </section>
+
+        <!-- SUMMARY FINAL SCREEN -->
+        <section id="screen-summary" class="hidden card-custom p-6 sm:p-10 text-center space-y-8">
+            <div>
+                <div class="text-6xl mb-2 animate-bounce">🏆</div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-brandPurple font-heading">¡Excelente trabajo!</h2>
+                <p class="text-sm sm:text-base text-gray-600 font-medium">Has completado todos los ejercicios prácticos.</p>
+            </div>
+
+            <!-- Total Score KPI Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-lavender/30 p-4 rounded-2xl border border-lavender">
+                    <div id="summary-percentage" class="text-3xl font-extrabold text-brandPurple font-heading">0%</div>
+                    <div class="text-xs font-bold text-darkText uppercase mt-1">Porcentaje final</div>
+                </div>
+                <div class="bg-successBg p-4 rounded-2xl border border-successGreen/30">
+                    <div id="summary-correct-count" class="text-3xl font-extrabold text-successGreen font-heading">0</div>
+                    <div class="text-xs font-bold text-darkText uppercase mt-1">Correctas</div>
+                </div>
+                <div class="bg-errorBg p-4 rounded-2xl border border-errorOrange/30">
+                    <div id="summary-review-count" class="text-3xl font-extrabold text-errorOrange font-heading">0</div>
+                    <div class="text-xs font-bold text-darkText uppercase mt-1">Para revisar</div>
+                </div>
+                <div class="bg-brandCream p-4 rounded-2xl border border-yellow-300">
+                    <div id="summary-score-points" class="text-3xl font-extrabold text-yellow-700 font-heading">0 / 9</div>
+                    <div class="text-xs font-bold text-darkText uppercase mt-1">Puntuación</div>
+                </div>
+            </div>
+
+            <!-- Breakdown by Category -->
+            <div class="bg-lavender/10 p-5 rounded-2xl border border-lavender text-left space-y-4">
+                <h3 class="font-extrabold text-brandPurple text-base sm:text-lg font-heading flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie"></i> Desglose por categoría:
+                </h3>
+                <div id="summary-categories-list" class="space-y-3 text-sm">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Unlocked Achievements -->
+            <div class="bg-white p-5 rounded-2xl border border-lavender text-left space-y-3">
+                <h3 class="font-extrabold text-brandPurple text-base font-heading flex items-center gap-2">
+                    <i class="fa-solid fa-award text-yellow-500"></i> Logros alcanzados:
+                </h3>
+                <ul id="summary-achievements-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm font-semibold text-darkText">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+
+            <!-- Summary Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 pt-2">
+                <button onclick="retryOnlyErrors()" id="btn-retry-errors-final" class="pill-btn px-5 py-3 bg-errorOrange text-white font-extrabold text-sm hover:bg-orange-600 transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-rotate-left"></i> Repetir errores
+                </button>
+                <button onclick="repeatReadingEx()" class="pill-btn px-5 py-3 bg-brandPink text-darkText font-extrabold text-sm hover:bg-pink-300 transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-book-open"></i> Repetir la lectura
+                </button>
+                <button onclick="reviewAllAnswers()" class="pill-btn px-5 py-3 bg-lavender text-darkText font-extrabold text-sm hover:bg-purple-300 transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-list-check"></i> Revisar respuestas
+                </button>
+                <button onclick="confirmGoHome()" class="pill-btn px-5 py-3 bg-brandPurple text-white font-extrabold text-sm hover:bg-purple-700 transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-house"></i> Volver al inicio
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FIXED BOTTOM NAVIGATION BAR -->
+    <nav id="bottom-navbar" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-lavender/40 py-3 px-4 z-40 shadow-lg">
+        <div class="max-w-[980px] mx-auto flex items-center justify-between gap-2">
+            <button id="btn-nav-prev" onclick="goToPrevExercise()" class="pill-btn px-4 py-2.5 bg-white border-2 border-lavender text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender/20 transition flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed">
+                <i class="fa-solid fa-chevron-left"></i>
+                <span>Anterior</span>
+            </button>
+
+            <button id="btn-nav-check" onclick="checkCurrentExercise()" class="pill-btn px-6 py-2.5 bg-brandPurple text-white font-extrabold text-sm hover:bg-purple-700 transition flex items-center gap-2 shadow-md">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Comprobar</span>
+            </button>
+
+            <button id="btn-nav-next" onclick="goToNextExercise()" class="pill-btn px-4 py-2.5 bg-brandPurple text-white font-extrabold text-xs sm:text-sm hover:bg-purple-700 transition flex items-center gap-1.5 shadow">
+                <span>Siguiente</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- CUSTOM DIALOG MODAL CONTAINER -->
+    <div id="custom-modal" class="hidden fixed inset-0 bg-darkText/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="card-custom bg-white max-w-md w-full p-6 text-center space-y-4 shadow-2xl relative">
+            <div id="modal-icon" class="text-5xl">💬</div>
+            <h3 id="modal-title" class="text-xl font-extrabold text-brandPurple font-heading">Modal Title</h3>
+            <div id="modal-body" class="text-sm font-medium text-gray-700">Modal message...</div>
+            <div id="modal-actions" class="flex justify-center gap-3 pt-2">
+                <button onclick="closeCustomModal()" class="pill-btn px-5 py-2 bg-gray-200 text-darkText font-bold text-sm">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Global Application State */
+        let currentExerciseIndex = 0; // 0 to 8
+        const totalExercises = 9;
+        let soundEnabled = true;
+
+        // User response state store
+        let userState = {
+            ex1: Array(8).fill(''), // Transport matching
+            ex2: ['', '', '', '', '', ''], // Personal preferences
+            ex3: Array(7).fill(''), // Verb conjugation selects
+            ex4: Array(8).fill(''), // Preposition buttons
+            ex5: Array(7).fill(''), // Ir/viajar/tomar verb choice buttons
+            ex6: [
+                { adv: '', dis: '' },
+                { adv: '', dis: '' },
+                { adv: '', dis: '' },
+                { adv: '', dis: '' },
+                { adv: '', dis: '' }
+            ],
+            ex7: Array(8).fill(null).map(() => ({ selectedWord: '', corrected: '', status: null })), // Error correction fixed
+            ex8: Array(6).fill(''), // Dialogue fill
+            ex9: Array(6).fill('') // Reading questions
+        };
+
+        // Attempts state per exercise
+        let attemptsCount = Array(9).fill(0);
+        let exerciseCompleted = Array(9).fill(false);
+        let exercisePassed = Array(9).fill(false);
+
+        // Audio Speech Synthesis Engine
+        function speakText(text, lang = 'es-PE') {
+            if (!soundEnabled) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('icon-sound');
+            const text = document.getElementById('text-sound');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high';
+                text.innerText = 'Sonido: sí';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark';
+                text.innerText = 'Sonido: no';
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            }
+        }
+
+        // Confetti Celebration Generator
+        function triggerConfetti(big = false) {
+            if (!soundEnabled && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: big ? 120 : 60,
+                    spread: big ? 100 : 60,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        function saveSessionProgress() {
+            try {
+                sessionStorage.setItem('spanish_app_state', JSON.stringify({
+                    userState,
+                    attemptsCount,
+                    exerciseCompleted,
+                    exercisePassed,
+                    currentExerciseIndex
+                }));
+            } catch (e) {
+                console.error("Session Storage error:", e);
+            }
+        }
+
+        function loadSessionProgress() {
+            try {
+                const saved = sessionStorage.getItem('spanish_app_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    userState = parsed.userState || userState;
+                    attemptsCount = parsed.attemptsCount || attemptsCount;
+                    exerciseCompleted = parsed.exerciseCompleted || exerciseCompleted;
+                    exercisePassed = parsed.exercisePassed || exercisePassed;
+                }
+            } catch (e) {
+                console.error("Session load error:", e);
+            }
+        }
+
+        // Custom Dialog Modal Handler
+        function openCustomModal(title, bodyHtml, icon = '💬', actionsHtml = null) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerHTML = bodyHtml;
+            document.getElementById('modal-icon').innerText = icon;
+            const actions = document.getElementById('modal-actions');
+            if (actionsHtml) {
+                actions.innerHTML = actionsHtml;
+            } else {
+                actions.innerHTML = `<button onclick="closeCustomModal()" class="pill-btn px-5 py-2 bg-brandPurple text-white font-bold text-sm">Entendido</button>`;
+            }
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function confirmGoHome() {
+            openCustomModal(
+                '¿Volver al inicio?',
+                '¿Deseas volver a la pantalla principal? Tu progreso guardado se mantendrá.',
+                '🏠',
+                `
+                <button onclick="closeCustomModal()" class="pill-btn px-4 py-2 bg-gray-200 text-darkText font-bold text-sm">Cancelar</button>
+                <button onclick="goHomeDirect()" class="pill-btn px-4 py-2 bg-brandPurple text-white font-bold text-sm">Sí, volver</button>
+                `
+            );
+        }
+
+        function goHomeDirect() {
+            closeCustomModal();
+            document.getElementById('exercise-wrapper').classList.add('hidden');
+            document.getElementById('bottom-navbar').classList.add('hidden');
+            document.getElementById('progress-header').classList.add('hidden');
+            document.getElementById('screen-summary').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+        }
+
+        function toggleTranslation(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('show');
+        }
+
+        /* NAVIGATION CONTROL */
+        function startApp() {
+            loadSessionProgress();
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-summary').classList.add('hidden');
+            document.getElementById('exercise-wrapper').classList.remove('hidden');
+            document.getElementById('bottom-navbar').classList.remove('hidden');
+            document.getElementById('progress-header').classList.remove('hidden');
+            loadExercise(currentExerciseIndex);
+        }
+
+        function updateProgressBar() {
+            const percent = ((currentExerciseIndex + 1) / totalExercises) * 100;
+            document.getElementById('progress-bar-inner').style.width = `${percent}%`;
+            document.getElementById('progress-counter').innerText = `Ejercicio ${currentExerciseIndex + 1} de 9`;
+            document.getElementById('btn-nav-prev').disabled = (currentExerciseIndex === 0);
+        }
+
+        function loadExercise(index) {
+            currentExerciseIndex = index;
+            updateProgressBar();
+            
+            // Clear feedback box
+            const fb = document.getElementById('feedback-display-box');
+            fb.classList.add('hidden');
+
+            const container = document.getElementById('exercise-content-area');
+
+            switch(index) {
+                case 0: renderExercise1(container); break;
+                case 1: renderExercise2(container); break;
+                case 2: renderExercise3(container); break;
+                case 3: renderExercise4(container); break;
+                case 4: renderExercise5(container); break;
+                case 5: renderExercise6(container); break;
+                case 6: renderExercise7(container); break;
+                case 7: renderExercise8(container); break;
+                case 8: renderExercise9(container); break;
+            }
+            saveSessionProgress();
+        }
+
+        function goToNextExercise() {
+            if (currentExerciseIndex < totalExercises - 1) {
+                loadExercise(currentExerciseIndex + 1);
+            } else {
+                showFinalSummary();
+            }
+        }
+
+        function goToPrevExercise() {
+            if (currentExerciseIndex > 0) {
+                loadExercise(currentExerciseIndex - 1);
+            }
+        }
+
+        /* ================= EXERCISE 1 ================= */
+        const ex1Items = [
+            { id: 'bus', name: 'el bus', emoji: '🚌' },
+            { id: 'taxi', name: 'el taxi', emoji: '🚕' },
+            { id: 'moto', name: 'la moto', emoji: '🛵' },
+            { id: 'carro', name: 'el carro', emoji: '🚗' },
+            { id: 'bicicleta', name: 'la bicicleta', emoji: '🚲' },
+            { id: 'avion', name: 'el avión', emoji: '✈️' },
+            { id: 'barco', name: 'el barco', emoji: '🛥️' },
+            { id: 'apie', name: 'a pie', emoji: '🚶' }
+        ];
+
+        let selectedEx1Word = null;
+
+        function renderExercise1(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Vocabulario';
+            document.getElementById('ex-instruction-es').innerText = 'Arrastra cada palabra hasta la imagen correcta o toca para relacionar.';
+            document.getElementById('ex-instruction-en').innerText = 'Drag each word to the correct picture or tap to match.';
+
+            const shuffledWords = [...ex1Items].sort(() => 0.5 - Math.random());
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Drop Targets Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        ${ex1Items.map((item, idx) => `
+                            <div id="ex1-zone-${item.id}" onclick="tapEx1Target('${item.id}')" class="drop-zone border-2 border-dashed border-lavender p-3 rounded-2xl flex flex-col items-center justify-between min-h-[120px] bg-white relative">
+                                <span class="text-4xl mb-1">${item.emoji}</span>
+                                <div id="ex1-slot-${item.id}" class="w-full text-center py-1.5 px-2 bg-lavender/10 rounded-xl text-xs font-bold text-brandPurple min-h-[30px] flex items-center justify-center">
+                                    ${userState.ex1[idx] ? userState.ex1[idx] : '<span class="text-gray-400 italic">Colocar aquí</span>'}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Word Bank Bottom -->
+                    <div class="bg-lavender/10 p-4 rounded-2xl border border-lavender">
+                        <div class="text-xs font-bold text-brandPurple mb-2 font-heading">Banco de palabras (Word bank):</div>
+                        <div id="ex1-bank" class="flex flex-wrap gap-2 justify-center">
+                            ${shuffledWords.map((item) => `
+                                <button id="ex1-word-${item.id}" onclick="selectEx1Word('${item.name}', '${item.id}')" class="draggable-item pill-btn px-3 py-1.5 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-brandPurple hover:text-white transition shadow-sm">
+                                    ${item.name}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectEx1Word(word, id) {
+            selectedEx1Word = { word, id };
+            document.querySelectorAll('#ex1-bank button').forEach(btn => btn.classList.remove('bg-brandCream', 'border-yellow-500'));
+            const currentBtn = document.getElementById(`ex1-word-${id}`);
+            if (currentBtn) currentBtn.classList.add('bg-brandCream', 'border-yellow-500');
+            speakText(word);
+        }
+
+        function tapEx1Target(targetId) {
+            if (!selectedEx1Word) return;
+            const targetItemIdx = ex1Items.findIndex(x => x.id === targetId);
+            if (targetItemIdx !== -1) {
+                userState.ex1[targetItemIdx] = selectedEx1Word.word;
+                const slot = document.getElementById(`ex1-slot-${targetId}`);
+                if (slot) slot.innerText = selectedEx1Word.word;
+
+                // Check correctness immediately
+                if (ex1Items[targetItemIdx].name === selectedEx1Word.word) {
+                    speakText(selectedEx1Word.word);
+                    triggerConfetti();
+                }
+            }
+            selectedEx1Word = null;
+        }
+
+        /* ================= EXERCISE 2 ================= */
+        function renderExercise2(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Vocabulario';
+            document.getElementById('ex-instruction-es').innerText = 'Completa las frases con un medio de transporte.';
+            document.getElementById('ex-instruction-en').innerText = 'Complete the sentences with a means of transportation.';
+
+            const prompts = [
+                { id: 0, text: '1. A mí me gusta ir en', placeholder: 'ej. bus / bicicleta', options: ['bus', 'taxi', 'moto', 'carro', 'bicicleta', 'avión', 'barco'] },
+                { id: 1, text: '2. A mí no me gusta ir en', placeholder: 'ej. moto / taxi', options: ['bus', 'taxi', 'moto', 'carro', 'bicicleta', 'avión', 'barco'] },
+                { id: 2, text: '3. En mi ciudad hay', placeholder: 'ej. buses / taxis', options: ['buses', 'taxis', 'motos', 'carros', 'bicicletas', 'aviones', 'barcos'] },
+                { id: 3, text: '4. En mi ciudad no hay', placeholder: 'ej. barcos / aviones', options: ['buses', 'taxis', 'motos', 'carros', 'bicicletas', 'aviones', 'barcos'] },
+                { id: 4, text: '5. Para ir al aeropuerto, prefiero', placeholder: 'ej. el taxi / en taxi', options: ['el taxi', 'el bus', 'el carro', 'en taxi', 'en bus'] },
+                { id: 5, text: '6. Cuando el lugar está cerca, voy', placeholder: 'ej. a pie / en bicicleta', options: ['a pie', 'en bicicleta', 'en moto', 'en bus', 'en carro'] }
+            ];
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    ${prompts.map((p) => `
+                        <div class="p-3.5 bg-lavender/10 rounded-2xl border border-lavender/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <label class="font-extrabold text-darkText text-sm sm:text-base">${p.text}</label>
+                            <select onchange="userState.ex2[${p.id}] = this.value" class="pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brandPurple">
+                                <option value="">-- seleccionar --</option>
+                                ${p.options.map(opt => `<option value="${opt}" ${userState.ex2[p.id] === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+
+                    <div class="pt-2 flex flex-wrap gap-3 justify-center">
+                        <button onclick="listenAllEx2()" class="pill-btn px-4 py-2 bg-brandPink text-darkText font-extrabold text-xs hover:bg-pink-300 transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-volume-high"></i> Escuchar todas
+                        </button>
+                        <button onclick="confirmReadEx2()" class="pill-btn px-4 py-2 bg-successGreen text-white font-extrabold text-xs hover:bg-green-700 transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-check"></i> Ya respondí en voz alta
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function listenAllEx2() {
+            const prompts = [
+                '1. A mí me gusta ir en ' + (userState.ex2[0] || 'bus'),
+                '2. A mí no me gusta ir en ' + (userState.ex2[1] || 'moto'),
+                '3. En mi ciudad hay ' + (userState.ex2[2] || 'buses'),
+                '4. En mi ciudad no hay ' + (userState.ex2[3] || 'barcos'),
+                '5. Para ir al aeropuerto, prefiero ' + (userState.ex2[4] || 'el taxi'),
+                '6. Cuando el lugar está cerca, voy ' + (userState.ex2[5] || 'a pie')
+            ];
+            speakText(prompts.join('. '));
+        }
+
+        function confirmReadEx2() {
+            triggerConfetti();
+            openCustomModal('¡Excelente práctica!', 'Has practicado tus preferencias en voz alta.', '🎉');
+        }
+
+        /* ================= EXERCISE 3 ================= */
+        const ex3Questions = [
+            { id: 0, text: 'Yo ___ al trabajo en bus.', emoji: '🚌', opts: ['voy', 'vas', 'va'], correct: 'voy' },
+            { id: 1, text: 'Tú ___ un taxi para ir al aeropuerto.', emoji: '🚕', opts: ['tomo', 'tomas', 'toma'], correct: 'tomas' },
+            { id: 2, text: 'Ella ___ a Cusco en avión.', emoji: '✈️', opts: ['viajo', 'viaja', 'viajan'], correct: 'viaja' },
+            { id: 3, text: 'Nosotros ___ al centro a pie.', emoji: '🚶', opts: ['vamos', 'van', 'voy'], correct: 'vamos' },
+            { id: 4, text: 'Ellos ___ el bus cerca de su casa.', emoji: '🚏', opts: ['toma', 'tomamos', 'toman'], correct: 'toman' },
+            { id: 5, text: 'Ustedes ___ a otro país en avión.', emoji: '🌍', opts: ['viajan', 'viajamos', 'viaja'], correct: 'viajan' },
+            { id: 6, text: 'Él ___ al restaurante en bicicleta.', emoji: '🚲', opts: ['voy', 'va', 'vas'], correct: 'va' }
+        ];
+
+        function renderExercise3(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Conjugación';
+            document.getElementById('ex-instruction-es').innerText = 'Selecciona la forma correcta del verbo.';
+            document.getElementById('ex-instruction-en').innerText = 'Select the correct form of the verb.';
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${ex3Questions.map((q) => `
+                        <div class="p-3.5 bg-lavender/10 rounded-2xl border border-lavender/40 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">${q.emoji}</span>
+                                <span class="font-extrabold text-darkText text-sm sm:text-base">${q.id + 1}. ${q.text}</span>
+                            </div>
+                            <select onchange="userState.ex3[${q.id}] = this.value" class="pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold px-3 py-1.5 text-sm outline-none">
+                                <option value="">-- verbo --</option>
+                                ${q.opts.map(o => `<option value="${o}" ${userState.ex3[q.id] === o ? 'selected' : ''}>${o}</option>`).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        /* ================= EXERCISE 4 ================= */
+        const ex4Questions = [
+            { id: 0, text: 'Voy ___ aeropuerto en taxi.', opts: ['a', 'al', 'en', 'a pie'], correct: 'al', emoji: '✈️' },
+            { id: 1, text: 'Ella va ___ bicicleta al parque.', opts: ['a', 'al', 'en', 'a pie'], correct: 'en', emoji: '🚲' },
+            { id: 2, text: 'Nosotros viajamos ___ Cusco.', opts: ['a', 'al', 'en', 'a pie'], correct: 'a', emoji: '🏔️' },
+            { id: 3, text: 'Ellos viajan ___ avión.', opts: ['a', 'al', 'en', 'a pie'], correct: 'en', emoji: '🛫' },
+            { id: 4, text: 'Voy al restaurante ___ porque está cerca.', opts: ['a', 'al', 'en', 'a pie'], correct: 'a pie', emoji: '🍽️' },
+            { id: 5, text: 'Tú vas ___ trabajo en bus.', opts: ['a', 'al', 'en', 'a pie'], correct: 'al', emoji: '💼' },
+            { id: 6, text: 'Viajamos ___ otra ciudad en carro.', opts: ['a', 'al', 'en', 'a pie'], correct: 'a', emoji: '🚗' },
+            { id: 7, text: 'Ella va ___ taxi al hotel.', opts: ['a', 'al', 'en', 'a pie'], correct: 'en', emoji: '🏨' }
+        ];
+
+        function renderExercise4(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Preposiciones';
+            document.getElementById('ex-instruction-es').innerText = 'Completa con “a”, “al”, “en” o “a pie”.';
+            document.getElementById('ex-instruction-en').innerText = 'Complete with “a,” “al,” “en,” or “a pie.”';
+
+            container.innerHTML = `
+                <div class="space-y-3">
+                    ${ex4Questions.map((q) => `
+                        <div class="p-3.5 bg-lavender/10 rounded-2xl border border-lavender/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">${q.emoji}</span>
+                                <span class="font-extrabold text-darkText text-sm sm:text-base">${q.id + 1}. ${q.text}</span>
+                            </div>
+                            <div class="flex gap-1.5 flex-wrap">
+                                ${q.opts.map(opt => `
+                                    <button onclick="selectEx4Btn(${q.id}, '${opt}')" id="ex4-btn-${q.id}-${opt}" class="ex4-group-${q.id} pill-btn px-3 py-1 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition ${userState.ex4[q.id] === opt ? 'bg-brandPurple text-white' : ''}">
+                                        ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectEx4Btn(qId, val) {
+            userState.ex4[qId] = val;
+            document.querySelectorAll(`.ex4-group-${qId}`).forEach(btn => {
+                btn.className = `ex4-group-${qId} pill-btn px-3 py-1 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition`;
+            });
+            const selectedBtn = document.getElementById(`ex4-btn-${qId}-${val}`);
+            if (selectedBtn) {
+                selectedBtn.className = `ex4-group-${qId} pill-btn px-3 py-1 bg-brandPurple text-white border-2 border-brandPurple font-extrabold text-xs sm:text-sm shadow`;
+            }
+        }
+
+        /* ================= EXERCISE 5 ================= */
+        const ex5Questions = [
+            { id: 0, text: 'Todos los días ___ al trabajo en bus.', opts: ['voy', 'viajo', 'tomo'], correct: ['voy'], emoji: '🚌' },
+            { id: 1, text: 'Para usar el bus, primero ___ el bus en la parada.', opts: ['voy', 'tomo', 'viajo'], correct: ['tomo'], emoji: '🚏' },
+            { id: 2, text: 'En mis vacaciones ___ a otro país.', opts: ['tomo', 'viajo', 'voy'], correct: ['viajo', 'voy'], emoji: '🌴' },
+            { id: 3, text: 'Mi hotel está cerca, por eso ___ a pie.', opts: ['voy', 'tomo', 'viajo'], correct: ['voy'], emoji: '🚶' },
+            { id: 4, text: 'En el aeropuerto ___ un avión.', opts: ['tomo', 'voy', 'viajo'], correct: ['tomo'], emoji: '🛫' },
+            { id: 5, text: 'Cuando tengo dos maletas, ___ un taxi.', opts: ['viajo', 'tomo', 'voy'], correct: ['tomo'], emoji: '🧳' },
+            { id: 6, text: 'Este verano ___ a Perú en avión.', opts: ['viajo', 'tomo', 'voy'], correct: ['viajo', 'voy'], emoji: '🇵🇪' }
+        ];
+
+        function renderExercise5(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Conjugación';
+            document.getElementById('ex-instruction-es').innerText = 'Elige el verbo correcto y completa la oración.';
+            document.getElementById('ex-instruction-en').innerText = 'Choose the correct verb and complete the sentence.';
+
+            container.innerHTML = `
+                <div class="space-y-3">
+                    ${ex5Questions.map((q) => `
+                        <div class="p-3.5 bg-lavender/10 rounded-2xl border border-lavender/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">${q.emoji}</span>
+                                <span class="font-extrabold text-darkText text-sm sm:text-base">${q.id + 1}. ${q.text}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                ${q.opts.map(opt => `
+                                    <button onclick="selectEx5Btn(${q.id}, '${opt}')" id="ex5-btn-${q.id}-${opt}" class="ex5-group-${q.id} pill-btn px-4 py-1.5 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition ${userState.ex5[q.id] === opt ? 'bg-brandPurple text-white' : ''}">
+                                        ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectEx5Btn(qId, val) {
+            userState.ex5[qId] = val;
+            document.querySelectorAll(`.ex5-group-${qId}`).forEach(btn => {
+                btn.className = `ex5-group-${qId} pill-btn px-4 py-1.5 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition`;
+            });
+            const selectedBtn = document.getElementById(`ex5-btn-${qId}-${val}`);
+            if (selectedBtn) {
+                selectedBtn.className = `ex5-group-${qId} pill-btn px-4 py-1.5 bg-brandPurple text-white border-2 border-brandPurple font-extrabold text-xs sm:text-sm shadow`;
+            }
+        }
+
+        /* ================= EXERCISE 6 ================= */
+        const ex6Transports = [
+            { id: 0, title: 'El taxi', emoji: '🚕', noun: 'taxi', advs: ['cómodo', 'rápido', 'seguro'], diss: ['caro', 'contaminante'] },
+            { id: 1, title: 'El bus', emoji: '🚌', noun: 'bus', advs: ['barato', 'ecológico', 'vacío'], diss: ['lento', 'lleno', 'incómodo', 'contaminante'] },
+            { id: 2, title: 'La bicicleta', emoji: '🚲', noun: 'bicicleta', advs: ['barata', 'ecológica', 'saludable', 'rápida'], diss: ['peligrosa', 'lenta', 'incómoda'] },
+            { id: 3, title: 'El avión', emoji: '✈️', noun: 'avión', advs: ['rápido', 'seguro', 'cómodo'], diss: ['caro', 'contaminante', 'incómodo'] },
+            { id: 4, title: 'Ir a pie', emoji: '🚶', noun: 'a pie', advs: ['barato', 'ecológico', 'saludable', 'seguro'], diss: ['lento', 'incómodo'] }
+        ];
+
+        function renderExercise6(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Situaciones reales';
+            document.getElementById('ex-instruction-es').innerText = 'Selecciona una ventaja y una desventaja para cada transporte. Forma la oración con “pero”.';
+            document.getElementById('ex-instruction-en').innerText = 'Select one advantage and one disadvantage for each means of transportation. Then form a sentence with “pero.”';
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    ${ex6Transports.map((t) => {
+                        const st = userState.ex6[t.id];
+                        const verb2 = (st.dis === 'lleno' || st.dis === 'vacío') ? 'está' : 'es';
+                        return `
+                            <div class="p-4 bg-lavender/10 rounded-2xl border border-lavender/40 space-y-3">
+                                <div class="flex items-center gap-2 font-extrabold text-brandPurple font-heading">
+                                    <span class="text-2xl">${t.emoji}</span>
+                                    <span>${t.title}</span>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                                    <div>
+                                        <label class="block font-bold mb-1 text-gray-600">Ventaja (positive):</label>
+                                        <select onchange="updateEx6Selection(${t.id}, 'adv', this.value)" class="w-full pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold p-2 outline-none">
+                                            <option value="">-- elegir ventaja --</option>
+                                            ${t.advs.map(a => `<option value="${a}" ${st.adv === a ? 'selected' : ''}>${a}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold mb-1 text-gray-600">Desventaja (negative):</label>
+                                        <select onchange="updateEx6Selection(${t.id}, 'dis', this.value)" class="w-full pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold p-2 outline-none">
+                                            <option value="">-- elegir desventaja --</option>
+                                            ${t.diss.map(d => `<option value="${d}" ${st.dis === d ? 'selected' : ''}>${d}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Formed Sentence Display -->
+                                <div class="bg-white p-3 rounded-xl border border-lavender text-xs sm:text-sm font-bold text-darkText flex items-center justify-between">
+                                    <span>
+                                        💬 Oración: <span class="text-brandPurple font-extrabold">${t.title} es ${st.adv || '___'}, pero ${verb2} ${st.dis || '___'}.</span>
+                                    </span>
+                                    <button onclick="speakText('${t.title} es ${st.adv || ''}, pero ${verb2} ${st.dis || ''}')" class="text-brandPurple hover:scale-110 transition p-1">
+                                        <i class="fa-solid fa-volume-high"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function updateEx6Selection(id, type, val) {
+            userState.ex6[id][type] = val;
+            renderExercise6(document.getElementById('exercise-content-area'));
+        }
+
+        /* ================= EXERCISE 7 ================= */
+        const ex7Sentences = [
+            { id: 0, wrong: 'Voy en aeropuerto.', correct: 'Voy al aeropuerto.', accepted: ['voy al aeropuerto'], hint: 'Usa "al" para ir + lugar masculino.', emoji: '✈️' },
+            { id: 1, wrong: 'Tomo en el bus para ir al trabajo.', correct: 'Tomo el bus para ir al trabajo.', accepted: ['tomo el bus para ir al trabajo'], hint: 'Tomar no necesita preposición "en".', emoji: '🚌' },
+            { id: 2, wrong: 'Ella viajan a Cusco.', correct: 'Ella viaja a Cusco.', accepted: ['ella viaja a cusco', 'viaja a cusco'], hint: 'Conjugación para ella es "viaja".', emoji: '⛰️' },
+            { id: 3, wrong: 'Nosotros vamos en pie.', correct: 'Nosotros vamos a pie.', accepted: ['nosotros vamos a pie', 'vamos a pie'], hint: 'Decimos "a pie", no "en pie".', emoji: '🚶' },
+            { id: 4, wrong: 'Tú va al centro en taxi.', correct: 'Tú vas al centro en taxi.', accepted: ['tu vas al centro en taxi', 'tú vas al centro en taxi', 'vas al centro en taxi'], hint: 'Conjugación para tú es "vas".', emoji: '🚕' },
+            { id: 5, wrong: 'Ellos viajan al avión.', correct: 'Ellos viajan en avión.', accepted: ['ellos viajan en avion', 'ellos viajan en avión', 'viajan en avión', 'viajan en avion'], hint: 'Usa "en" para medios de transporte.', emoji: '🛫' },
+            { id: 6, wrong: 'Yo tomo a un taxi.', correct: 'Yo tomo un taxi.', accepted: ['yo tomo un taxi', 'tomo un taxi'], hint: 'Tomar no necesita la preposición "a" aquí.', emoji: '🚖' },
+            { id: 7, wrong: 'Viajamos en Argentina.', correct: 'Viajamos a Argentina.', accepted: ['viajamos a argentina', 'nosotros viajamos a argentina'], hint: 'Usa "a" para indicar destino.', emoji: '🇦🇷' }
+        ];
+
+        function renderExercise7(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Preposiciones';
+            document.getElementById('ex-instruction-es').innerText = 'Cada oración tiene un error. Toca la palabra incorrecta y escribe la oración corregida.';
+            document.getElementById('ex-instruction-en').innerText = 'Each sentence has one mistake. Tap the wrong word and write the corrected sentence.';
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    ${ex7Sentences.map((s) => {
+                        const words = s.wrong.split(' ');
+                        const state = userState.ex7[s.id] || { selectedWord: '', corrected: '', status: null };
+                        const status = state.status;
+                        
+                        let borderClass = 'border-lavender/40 bg-lavender/10';
+                        let statusIcon = '';
+                        if (status === 'correct') {
+                            borderClass = 'border-successGreen bg-successBg/50';
+                            statusIcon = '<span class="text-successGreen font-extrabold text-sm ml-auto"><i class="fa-solid fa-circle-check"></i> Correcto</span>';
+                        } else if (status === 'incorrect') {
+                            borderClass = 'border-errorOrange bg-errorBg/50';
+                            statusIcon = '<span class="text-errorOrange font-extrabold text-sm ml-auto"><i class="fa-solid fa-circle-xmark"></i> Revisa esta oración</span>';
+                        }
+
+                        return `
+                            <div class="p-3.5 rounded-2xl border-2 ${borderClass} space-y-2.5 transition-all">
+                                <div class="flex items-center gap-2 font-extrabold text-darkText text-sm sm:text-base flex-wrap">
+                                    <span class="text-2xl">${s.emoji}</span>
+                                    <span class="text-xs font-bold text-gray-500 uppercase mr-1">${s.id + 1}.</span>
+                                    <div class="flex flex-wrap gap-1 items-center">
+                                        ${words.map(w => {
+                                            const cleanW = w.replace(/[.,!]/g, '');
+                                            const isSelected = state.selectedWord === cleanW;
+                                            return `
+                                                <button onclick="selectEx7Word(${s.id}, '${cleanW}')" class="px-2 py-0.5 rounded-lg text-xs sm:text-sm font-bold transition border ${isSelected ? 'bg-errorOrange text-white border-errorOrange line-through' : 'bg-white text-darkText border-gray-300 hover:border-brandPurple'}">
+                                                    ${w}
+                                                </button>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                    ${statusIcon}
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                                    <input type="text" 
+                                        placeholder="Escribe la oración correcta aquí..." 
+                                        value="${state.corrected || ''}" 
+                                        oninput="userState.ex7[${s.id}].corrected = this.value; userState.ex7[${s.id}].status = null;" 
+                                        class="w-full pill-btn bg-white border-2 border-brandPurple text-darkText font-medium px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brandPurple">
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function selectEx7Word(qId, word) {
+            if (!userState.ex7[qId]) userState.ex7[qId] = { selectedWord: '', corrected: '', status: null };
+            if (userState.ex7[qId].selectedWord === word) {
+                userState.ex7[qId].selectedWord = '';
+            } else {
+                userState.ex7[qId].selectedWord = word;
+            }
+            renderExercise7(document.getElementById('exercise-content-area'));
+        }
+
+        /* ================= EXERCISE 8 ================= */
+        const ex8Options = [
+            '¿Cómo llego al centro histórico?',
+            'está al lado del hotel',
+            'voy a pie',
+            'está lejos',
+            'tomo un taxi',
+            'viajo en avión',
+            'puede tomar el bus' // Distractor
+        ];
+
+        const ex8Dialogue = [
+            { speaker: 'A', text: 'Disculpe, ¿me puede ayudar?', en: 'Excuse me, can you help me?' },
+            { speaker: 'B', text: 'Claro. ¿Adónde quiere ir?', en: 'Sure. Where do you want to go?' },
+            { speaker: 'A', fillIdx: 0, en: 'How do I get to the historic center?' },
+            { speaker: 'B', text: 'Puede tomar el Metropolitano.', en: 'You can take the Metropolitano.' },
+            { speaker: 'A', text: '¿Dónde está la estación?', en: 'Where is the station?' },
+            { speaker: 'B', text: 'La estación ', fillIdx: 1, en: 'The station is next to the hotel.' },
+            { speaker: 'A', text: 'Perfecto. Hasta la estación ', fillIdx: 2, en: 'Perfect. To the station I go on foot.' },
+            { speaker: 'B', text: '¿Y cómo va al aeropuerto?', en: 'And how are you going to the airport?' },
+            { speaker: 'A', text: 'El aeropuerto ', fillIdx: 3, text2: ', por eso ', fillIdx2: 4, en: 'The airport is far, so I take a taxi.' },
+            { speaker: 'B', text: '¿Y después?', en: 'And afterwards?' },
+            { speaker: 'A', text: 'Después ', fillIdx: 5, text2: ' a Cusco.', en: 'Afterwards I travel by plane to Cusco.' }
+        ];
+
+        function renderExercise8(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Situaciones reales';
+            document.getElementById('ex-instruction-es').innerText = 'Completa el diálogo con las expresiones del recuadro.';
+            document.getElementById('ex-instruction-en').innerText = 'Complete the dialogue with the expressions in the box.';
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Word Bank Box -->
+                    <div class="bg-lavender/20 p-4 rounded-2xl border border-lavender">
+                        <div class="text-xs font-bold text-brandPurple mb-2 font-heading">Expresiones disponibles:</div>
+                        <div class="flex flex-wrap gap-2">
+                            ${ex8Options.map((opt) => `
+                                <button onclick="insertEx8Word('${opt}')" class="pill-btn px-3 py-1.5 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-brandPurple hover:text-white transition shadow-sm">
+                                    + ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Chat Bubbles Interface -->
+                    <div class="space-y-3 bg-white p-4 rounded-2xl border-2 border-lavender">
+                        ${ex8Dialogue.map((d, i) => `
+                            <div class="flex flex-col ${d.speaker === 'A' ? 'items-start' : 'items-end'} space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-extrabold uppercase text-gray-400">Persona ${d.speaker}</span>
+                                    <button onclick="toggleTranslation('ex8-trans-${i}')" class="pill-btn px-2 py-0.5 bg-brandPink/30 text-darkText font-bold text-[10px] hover:bg-brandPink transition">EN</button>
+                                </div>
+                                <div class="p-3 rounded-2xl max-w-lg text-xs sm:text-sm font-semibold shadow-sm ${d.speaker === 'A' ? 'bg-lavender/20 text-darkText rounded-tl-none border border-lavender/40' : 'bg-brandPurple text-white rounded-tr-none'}">
+                                    ${d.text || ''}
+                                    ${d.fillIdx !== undefined ? `
+                                        <select onchange="userState.ex8[${d.fillIdx}] = this.value" class="pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold px-2 py-1 text-xs outline-none">
+                                            <option value="">-- elegir --</option>
+                                            ${ex8Options.map(o => `<option value="${o}" ${userState.ex8[d.fillIdx] === o ? 'selected' : ''}>${o}</option>`).join('')}
+                                        </select>
+                                    ` : ''}
+                                    ${d.text2 || ''}
+                                    ${d.fillIdx2 !== undefined ? `
+                                        <select onchange="userState.ex8[${d.fillIdx2}] = this.value" class="pill-btn bg-white border-2 border-brandPurple text-brandPurple font-extrabold px-2 py-1 text-xs outline-none">
+                                            <option value="">-- elegir --</option>
+                                            ${ex8Options.map(o => `<option value="${o}" ${userState.ex8[d.fillIdx2] === o ? 'selected' : ''}>${o}</option>`).join('')}
+                                        </select>
+                                    ` : ''}
+                                </div>
+                                <div id="ex8-trans-${i}" class="en-translation text-xs text-gray-500 italic px-2">${d.en}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="listenEx8Dialogue()" class="pill-btn px-6 py-2.5 bg-brandPurple text-white font-extrabold text-sm hover:bg-purple-700 transition flex items-center gap-2 mx-auto shadow">
+                            <i class="fa-solid fa-volume-high"></i> Escuchar el diálogo completo
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function insertEx8Word(word) {
+            const firstEmpty = userState.ex8.findIndex(x => x === '');
+            if (firstEmpty !== -1) {
+                userState.ex8[firstEmpty] = word;
+                renderExercise8(document.getElementById('exercise-content-area'));
+            }
+        }
+
+        function listenEx8Dialogue() {
+            const fullText = ex8Dialogue.map(d => {
+                let part = d.text || '';
+                if (d.fillIdx !== undefined) part += ' ' + (userState.ex8[d.fillIdx] || '___');
+                if (d.text2) part += d.text2;
+                if (d.fillIdx2 !== undefined) part += ' ' + (userState.ex8[d.fillIdx2] || '___');
+                return part;
+            }).join('. ');
+            speakText(fullText);
+        }
+
+        /* ================= EXERCISE 9 ================= */
+        const ex9TextParagraphs = [
+            { es: 'Sofía está en un hotel de Miraflores. Por la mañana quiere visitar el centro histórico de Lima. La estación del Metropolitano está cerca del hotel, así que Sofía va a pie hasta la estación. Allí toma el Metropolitano y va al centro.', en: 'Sofía is in a hotel in Miraflores. In the morning she wants to visit the historic center of Lima. The Metropolitano station is near the hotel, so Sofía goes on foot to the station. There she takes the Metropolitano and goes downtown.' },
+            { es: 'Después de visitar el centro histórico, Sofía regresa al hotel en taxi porque está cansada. El taxi es cómodo y rápido, pero es más caro que el bus.', en: 'After visiting the historic center, Sofía returns to the hotel by taxi because she is tired. The taxi is comfortable and fast, but it is more expensive than the bus.' },
+            { es: 'Al día siguiente, Sofía quiere viajar a Cusco. El aeropuerto está lejos del hotel. Sofía tiene dos maletas, por eso toma un taxi para ir al aeropuerto. Allí toma un avión y viaja a Cusco.', en: 'The next day, Sofía wants to travel to Cusco. The airport is far from the hotel. Sofía has two suitcases, so she takes a taxi to go to the airport. There she takes a plane and travels to Cusco.' },
+            { es: 'En Cusco, su alojamiento está al lado de la Plaza de Armas. Sofía no necesita tomar un taxi porque puede ir a pie.', en: 'In Cusco, her lodging is next to the Plaza de Armas. Sofía does not need to take a taxi because she can go on foot.' }
+        ];
+
+        const ex9Questions = [
+            { id: 0, q: '1. ¿Dónde está el hotel de Sofía?', qEn: 'Where is Sofía’s hotel?', opts: ['En Miraflores.', 'En Cusco.', 'En el aeropuerto.'], correct: 'En Miraflores.' },
+            { id: 1, q: '2. ¿Cómo va Sofía hasta la estación?', qEn: 'How does Sofía get to the station?', opts: ['A pie.', 'En taxi.', 'En avión.'], correct: 'A pie.' },
+            { id: 2, q: '3. ¿Qué transporte toma para ir al centro?', qEn: 'Which transportation does she take to go downtown?', opts: ['El Metropolitano.', 'Un avión.', 'Una bicicleta.'], correct: 'El Metropolitano.' },
+            { id: 3, q: '4. ¿Por qué regresa al hotel en taxi?', qEn: 'Why does she return to the hotel by taxi?', opts: ['Porque está cansada.', 'Porque viaja a Cusco.', 'Porque el taxi es barato.'], correct: 'Porque está cansada.' },
+            { id: 4, q: '5. ¿Por qué toma un taxi para ir al aeropuerto?', qEn: 'Why does she take a taxi to go to the airport?', opts: ['Porque el aeropuerto está lejos y tiene dos maletas.', 'Porque el aeropuerto está al lado del hotel.', 'Porque no hay taxis.'], correct: 'Porque el aeropuerto está lejos y tiene dos maletas.' },
+            { id: 5, q: '6. ¿Cómo viaja a Cusco?', qEn: 'How does she travel to Cusco?', opts: ['En avión.', 'A pie.', 'En bicicleta.'], correct: 'En avión.' }
+        ];
+
+        let isEx9TextHidden = false;
+
+        function renderExercise9(container) {
+            document.getElementById('ex-category-tag').innerText = 'Categoría: Comprensión lectora';
+            document.getElementById('ex-instruction-es').innerText = 'Lee el texto y elige la respuesta correcta.';
+            document.getElementById('ex-instruction-en').innerText = 'Read the text and choose the correct answer.';
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Reading Text Card -->
+                    <div class="bg-lavender/15 p-4 rounded-2xl border-2 border-lavender space-y-3">
+                        <div class="flex items-center justify-between border-b border-lavender/40 pb-2">
+                            <h4 class="font-extrabold text-brandPurple font-heading flex items-center gap-2">
+                                📖 Un día viajando por Perú
+                            </h4>
+                            <div class="flex gap-2">
+                                <button onclick="speakText(ex9TextParagraphs.map(p => p.es).join(' '))" class="pill-btn px-3 py-1 bg-brandPurple text-white font-bold text-xs hover:bg-purple-700 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-volume-high"></i> Escuchar
+                                </button>
+                                <button onclick="toggleEx9TextVisibility()" class="pill-btn px-3 py-1 bg-white border border-brandPurple text-brandPurple font-bold text-xs hover:bg-lavender transition">
+                                    ${isEx9TextHidden ? 'Ver el texto otra vez' : 'Ocultar texto'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="ex9-reading-body" class="${isEx9TextHidden ? 'hidden' : 'space-y-2'} text-xs sm:text-sm font-medium text-darkText">
+                            ${ex9TextParagraphs.map((p, idx) => `
+                                <div onclick="toggleTranslation('ex9-trans-p-${idx}')" class="p-2 bg-white rounded-xl border border-lavender/40 cursor-pointer hover:bg-lavender/10 transition">
+                                    <p>${p.es}</p>
+                                    <p id="ex9-trans-p-${idx}" class="en-translation text-xs text-gray-500 italic mt-1">${p.en}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Questions List -->
+                    <div class="space-y-4">
+                        ${ex9Questions.map((q) => `
+                            <div class="p-4 bg-lavender/10 rounded-2xl border border-lavender/40 space-y-2">
+                                <div class="font-extrabold text-darkText text-sm sm:text-base font-heading">
+                                    ${q.q}
+                                    <div class="text-xs text-gray-500 font-normal italic font-body">${q.qEn}</div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                                    ${q.opts.map(opt => `
+                                        <button onclick="selectEx9Option(${q.id}, '${opt}')" id="ex9-btn-${q.id}-${opt.replace(/\s+/g, '')}" class="ex9-group-${q.id} pill-btn px-3 py-2 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition ${userState.ex9[q.id] === opt ? 'bg-brandPurple text-white' : ''}">
+                                            ${opt}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleEx9TextVisibility() {
+            isEx9TextHidden = !isEx9TextHidden;
+            renderExercise9(document.getElementById('exercise-content-area'));
+        }
+
+        function selectEx9Option(qId, val) {
+            userState.ex9[qId] = val;
+            document.querySelectorAll(`.ex9-group-${qId}`).forEach(btn => {
+                btn.className = `ex9-group-${qId} pill-btn px-3 py-2 bg-white border-2 border-brandPurple text-brandPurple font-extrabold text-xs sm:text-sm hover:bg-lavender transition`;
+            });
+            const safeVal = val.replace(/\s+/g, '');
+            const selectedBtn = document.getElementById(`ex9-btn-${qId}-${safeVal}`);
+            if (selectedBtn) {
+                selectedBtn.className = `ex9-group-${qId} pill-btn px-3 py-2 bg-brandPurple text-white border-2 border-brandPurple font-extrabold text-xs sm:text-sm shadow`;
+            }
+        }
+
+        /* ================= CHECKING & EVALUATION LOGIC ================= */
+        function checkCurrentExercise() {
+            attemptsCount[currentExerciseIndex]++;
+            let isCorrect = false;
+            let hintEs = '';
+            let explanationEn = '';
+
+            const fb = document.getElementById('feedback-display-box');
+            fb.classList.remove('hidden', 'bg-successBg', 'text-successGreen', 'border-successGreen', 'bg-errorBg', 'text-errorOrange', 'border-errorOrange');
+
+            switch(currentExerciseIndex) {
+                case 0: { // Ex 1
+                    let matches = 0;
+                    ex1Items.forEach((item, idx) => {
+                        if (userState.ex1[idx] === item.name) matches++;
+                    });
+                    isCorrect = (matches === ex1Items.length);
+                    hintEs = 'Pista: Revisa los nombres de cada vehículo.';
+                    explanationEn = 'Ensure each picture matches its exact transport name.';
+                    break;
+                }
+                case 1: { // Ex 2
+                    isCorrect = userState.ex2.every(v => v !== '');
+                    hintEs = 'Pista: Selecciona una opción para cada una de las 6 frases.';
+                    explanationEn = 'Make sure to select a transport option for all 6 sentences.';
+                    break;
+                }
+                case 2: { // Ex 3
+                    isCorrect = ex3Questions.every(q => userState.ex3[q.id] === q.correct);
+                    hintEs = 'Pista: Revisa las conjugaciones de voy/vas/va, tomo/tomas/toma y viaja/viajan.';
+                    explanationEn = 'Verify subject-verb agreement (e.g., Yo voy, Tú tomas, Ella viaja).';
+                    break;
+                }
+                case 3: { // Ex 4
+                    isCorrect = ex4Questions.every(q => userState.ex4[q.id] === q.correct);
+                    hintEs = 'Pista: Recuerda: ir "al" lugar (masculino), "a" lugar (femenino/nombre), "en" transporte, "a pie".';
+                    explanationEn = 'Use "al" for masculine places, "a" for cities, "en" for transports, and "a pie" for walking.';
+                    break;
+                }
+                case 4: { // Ex 5
+                    isCorrect = ex5Questions.every(q => q.correct.includes(userState.ex5[q.id]));
+                    hintEs = 'Pista: Usamos "voy" para desplazarse, "tomo" para subirse al transporte, y "viajo" para viajes largos.';
+                    explanationEn = 'Use "voy" to express going somewhere, "tomo" for taking vehicles/buses, "viajo" for traveling to cities/countries.';
+                    break;
+                }
+                case 5: { // Ex 6
+                    isCorrect = userState.ex6.every(t => t.adv !== '' && t.dis !== '');
+                    hintEs = 'Pista: Elige una ventaja positiva y una desventaja negativa para cada medio.';
+                    explanationEn = 'Select one positive trait and one negative trait for each transportation type.';
+                    break;
+                }
+                case 6: { // Ex 7
+                    let correctCount = 0;
+                    ex7Sentences.forEach(s => {
+                        const userVal = (userState.ex7[s.id]?.corrected || '')
+                            .trim()
+                            .toLowerCase()
+                            .replace(/[.,!¡¿?]/g, '')
+                            .replace(/\s+/g, ' ');
+                        
+                        const isAccepted = s.accepted.some(acc => {
+                            const normalizedAcc = acc.toLowerCase().replace(/[.,!¡¿?]/g, '').replace(/\s+/g, ' ');
+                            return userVal === normalizedAcc;
+                        });
+
+                        if (isAccepted) {
+                            correctCount++;
+                            userState.ex7[s.id].status = 'correct';
+                        } else {
+                            userState.ex7[s.id].status = 'incorrect';
+                        }
+                    });
+
+                    renderExercise7(document.getElementById('exercise-content-area'));
+                    isCorrect = (correctCount === ex7Sentences.length);
+                    hintEs = 'Pista: Revisa las preposiciones "al", "en", "a pie" y las conjugaciones de cada verbo.';
+                    explanationEn = 'Double-check prep phrases (al aeropuerto, en bus, a pie, en avión, a Argentina).';
+                    break;
+                }
+                case 7: { // Ex 8
+                    const correctAnswers = [
+                        '¿Cómo llego al centro histórico?',
+                        'está al lado del hotel',
+                        'voy a pie',
+                        'está lejos',
+                        'tomo un taxi',
+                        'viajo en avión'
+                    ];
+                    isCorrect = correctAnswers.every((ans, idx) => userState.ex8[idx] === ans);
+                    hintEs = 'Pista: Revisa las expresiones de ubicación y medios de transporte.';
+                    explanationEn = 'Check destination questions, proximity ("al lado del"), and transportation choices.';
+                    break;
+                }
+                case 8: { // Ex 9
+                    isCorrect = ex9Questions.every(q => userState.ex9[q.id] === q.correct);
+                    hintEs = 'Pista: Vuelve a consultar el texto haciendo clic en "Ver el texto otra vez".';
+                    explanationEn = 'Refer back to the short paragraphs for exact transport details and reasons.';
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                exercisePassed[currentExerciseIndex] = true;
+                exerciseCompleted[currentExerciseIndex] = true;
+                fb.classList.add('bg-successBg', 'text-successGreen', 'border-2', 'border-successGreen');
+                fb.innerHTML = `
+                    <div class="flex items-center justify-center gap-2 font-extrabold text-lg font-heading">
+                        <i class="fa-solid fa-circle-check text-2xl"></i> ¡Muy bien! ¡Excelente! ¡Correcto! 🎉
+                    </div>
+                `;
+                triggerConfetti();
+            } else {
+                exerciseCompleted[currentExerciseIndex] = true;
+                fb.classList.add('bg-errorBg', 'text-errorOrange', 'border-2', 'border-errorOrange');
+                if (attemptsCount[currentExerciseIndex] === 1) {
+                    fb.innerHTML = `
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-center gap-2 font-extrabold text-base font-heading">
+                                <i class="fa-solid fa-circle-xmark text-xl"></i> Inténtalo otra vez.
+                            </div>
+                            <div class="text-xs font-bold font-body text-gray-700">${hintEs}</div>
+                        </div>
+                    `;
+                } else {
+                    fb.innerHTML = `
+                        <div class="space-y-1 text-left">
+                            <div class="flex items-center gap-2 font-extrabold text-base font-heading text-errorOrange">
+                                <i class="fa-solid fa-circle-info text-xl"></i> Solución y explicación:
+                            </div>
+                            <div class="text-xs font-bold font-body text-gray-800">${explanationEn}</div>
+                        </div>
+                    `;
+                }
+            }
+            fb.classList.remove('hidden');
+            saveSessionProgress();
+        }
+
+        /* ================= FINAL SUMMARY & BREAKDOWN ================= */
+        function showFinalSummary() {
+            document.getElementById('exercise-wrapper').classList.add('hidden');
+            document.getElementById('bottom-navbar').classList.add('hidden');
+            document.getElementById('progress-header').classList.add('hidden');
+            document.getElementById('screen-summary').classList.remove('hidden');
+
+            const passedCount = exercisePassed.filter(Boolean).length;
+            const percent = Math.round((passedCount / totalExercises) * 100);
+
+            document.getElementById('summary-percentage').innerText = `${percent}%`;
+            document.getElementById('summary-correct-count').innerText = passedCount;
+            document.getElementById('summary-review-count').innerText = totalExercises - passedCount;
+            document.getElementById('summary-score-points').innerText = `${passedCount} / ${totalExercises}`;
+
+            // Category breakdown list
+            const categories = [
+                { name: 'Vocabulario', indices: [0, 1] },
+                { name: 'Conjugación', indices: [2, 4] },
+                { name: 'Preposiciones', indices: [3, 6] },
+                { name: 'Situaciones reales', indices: [5, 7] },
+                { name: 'Comprensión lectora', indices: [8] }
+            ];
+
+            const catListContainer = document.getElementById('summary-categories-list');
+            catListContainer.innerHTML = '';
+
+            const achievementsContainer = document.getElementById('summary-achievements-list');
+            achievementsContainer.innerHTML = '';
+
+            const achievementsMap = [
+                { cat: 'Conjugación', text: 'Puedes decir adónde vas' },
+                { cat: 'Vocabulario', text: 'Puedes explicar qué transporte tomas' },
+                { cat: 'Preposiciones', text: 'Puedes hablar sobre cómo viajas' },
+                { cat: 'Situaciones reales', text: 'Puedes recomendar un transporte' },
+                { cat: 'Comprensión lectora', text: 'Puedes comprender información sencilla sobre una ruta' }
+            ];
+
+            categories.forEach(cat => {
+                const totalInCat = cat.indices.length;
+                const passedInCat = cat.indices.filter(idx => exercisePassed[idx]).length;
+                const catPercent = Math.round((passedInCat / totalInCat) * 100);
+
+                let rating = 'Pendiente';
+                if (catPercent === 100) rating = 'Muy bien';
+                else if (catPercent >= 50) rating = 'Casi';
+                else if (catPercent > 0) rating = 'Sigue practicando';
+
+                catListContainer.innerHTML += `
+                    <div>
+                        <div class="flex justify-between font-extrabold mb-1">
+                            <span>${cat.name} (${passedInCat}/${totalInCat})</span>
+                            <span class="text-brandPurple font-heading">${rating} (${catPercent}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                            <div class="bg-brandPurple h-2.5 rounded-full transition-all duration-700" style="width: ${catPercent}%"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Check achievement unlock
+                if (catPercent >= 70) {
+                    const ach = achievementsMap.find(a => a.cat === cat.name);
+                    if (ach) {
+                        achievementsContainer.innerHTML += `
+                            <li class="flex items-center gap-2 bg-successBg p-2 rounded-xl border border-successGreen/30">
+                                <i class="fa-solid fa-circle-check text-successGreen"></i>
+                                <span>${ach.text}</span>
+                            </li>
+                        `;
+                    }
+                }
+            });
+
+            if (achievementsContainer.children.length === 0) {
+                achievementsContainer.innerHTML = `<li class="text-gray-500 italic text-xs">Completa con mayor precisión los ejercicios para desbloquear logros.</li>`;
+            }
+
+            if (percent >= 70) {
+                triggerConfetti(true);
+            }
+        }
+
+        function retryOnlyErrors() {
+            const firstError = exercisePassed.findIndex(p => !p);
+            if (firstError !== -1) {
+                document.getElementById('screen-summary').classList.add('hidden');
+                document.getElementById('exercise-wrapper').classList.remove('hidden');
+                document.getElementById('bottom-navbar').classList.remove('hidden');
+                document.getElementById('progress-header').classList.remove('hidden');
+                loadExercise(firstError);
+            } else {
+                openCustomModal('¡Felicidades!', 'Has respondido correctamente todos los ejercicios.', '🎉');
+            }
+        }
+
+        function repeatReadingEx() {
+            document.getElementById('screen-summary').classList.add('hidden');
+            document.getElementById('exercise-wrapper').classList.remove('hidden');
+            document.getElementById('bottom-navbar').classList.remove('hidden');
+            document.getElementById('progress-header').classList.remove('hidden');
+            loadExercise(8);
+        }
+
+        function reviewAllAnswers() {
+            document.getElementById('screen-summary').classList.add('hidden');
+            document.getElementById('exercise-wrapper').classList.remove('hidden');
+            document.getElementById('bottom-navbar').classList.remove('hidden');
+            document.getElementById('progress-header').classList.remove('hidden');
+            loadExercise(0);
+        }
+    </script>
+</body>
+</html>
