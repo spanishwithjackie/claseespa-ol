@@ -1,0 +1,449 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>¿Qué te da miedo?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Poppins:wght@400;500&family=Work+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: cream page, dark cards in a 4-column grid; 5 fear cards + TOP 3 panel + writing prompts */
+:root {
+  --paper: #f1e5cf;
+  --paper-2: #f8f0e0;
+  --ink: #101913;
+  --ink-line: #1f2d24;
+  --leaf: #bde3a1;
+  --leaf-dim: #82a98b;
+  --dark: #17170f;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --prompt: 'Poppins', 'Work Sans', system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper);
+  color: var(--dark);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-block: 34px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 900px; margin: 0 auto; }
+h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 38px);
+  line-height: 1.15;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.lead { max-width: 33rem; margin: 0 0 20px; font-size: 16px; color: #3b3a2e; }
+
+.scale {
+  background: var(--ink);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  font-size: 11px; color: #e9f3e3;
+}
+.scale b { font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--leaf); }
+.scale .dash { color: #4a5f50; }
+.scale .hi { color: var(--leaf); font-weight: 700; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 22px;
+  align-items: stretch;
+}
+.card {
+  background: var(--ink);
+  border: 1px solid var(--ink-line);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 14px 26px -16px rgba(0,0,0,.55);
+  color: #fff;
+  min-width: 0;
+  transition: box-shadow .2s, border-color .2s;
+}
+.card.is-top { border-color: var(--leaf); box-shadow: 0 0 0 1px var(--leaf), 0 14px 26px -16px rgba(0,0,0,.55); }
+.scene { display: block; width: 100%; height: 110px; }
+.card-body { padding: 14px 12px 14px; display: flex; flex-direction: column; flex: 1; gap: 12px; }
+.card h2 {
+  margin: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  font-family: var(--body); font-weight: 800; font-size: 18px; line-height: 1.2;
+}
+.card h2 .em { font-size: 16px; line-height: 1.2; }
+.ctl { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.ctl label { font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--leaf-dim); }
+.row { display: flex; align-items: center; gap: 10px; }
+.badge {
+  min-width: 30px; height: 24px; padding: 0 6px;
+  display: grid; place-items: center;
+  border: 1px solid #3b5c47; border-radius: 6px; background: #0a100c;
+  color: var(--leaf); font-size: 11px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  flex: 1; min-width: 0; height: 18px; margin: 0; background: transparent; cursor: pointer;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  height: 5px; border-radius: 3px;
+  background: linear-gradient(to right, var(--leaf) var(--p, 0%), #26352b var(--p, 0%));
+}
+input[type=range]::-moz-range-track { height: 5px; border-radius: 3px; background: #26352b; }
+input[type=range]::-moz-range-progress { height: 5px; border-radius: 3px; background: var(--leaf); }
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; margin-top: -5.5px; border-radius: 50%;
+  background: var(--leaf); border: 2px solid #e8f6dc; box-shadow: 0 0 0 3px rgba(189,227,161,.15);
+}
+input[type=range]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--leaf); border: 2px solid #e8f6dc;
+}
+input[type=range]:focus-visible { outline: none; }
+input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(189,227,161,.45); }
+input[type=range]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba(189,227,161,.45); }
+
+.top3 {
+  grid-column: 4; grid-row: 1; align-self: start;
+  background: var(--ink); color: #fff; border: 1px solid var(--ink-line);
+  border-radius: 12px; padding: 14px;
+  box-shadow: 0 14px 26px -16px rgba(0,0,0,.55);
+}
+.top3 header { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+.top3 .ico {
+  width: 28px; height: 28px; border-radius: 7px; border: 1px solid #3b5c47;
+  display: grid; place-items: center; color: var(--leaf); flex: none;
+}
+.top3 h3 { margin: 0; font-size: 18px; font-weight: 800; line-height: 1.1; letter-spacing: .01em; }
+.top3 header p { margin: 2px 0 0; font-size: 11px; color: var(--leaf-dim); }
+.top3 .empty {
+  border: 1px dashed #355241; border-radius: 8px; background: #0b120e;
+  padding: 12px; font-size: 10.5px; line-height: 1.5; color: var(--leaf-dim);
+}
+.top3 ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.top3 li {
+  display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 8px;
+  background: #0b120e; border: 1px solid #263a2e; border-radius: 8px; padding: 8px 10px;
+  font-size: 13px; font-weight: 600; min-width: 0;
+}
+.top3 li:first-child { border-color: var(--leaf); }
+.top3 li .n { font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--leaf); }
+.top3 li .nm { min-width: 0; overflow-wrap: anywhere; }
+.top3 li .sc { font-size: 11px; color: var(--leaf); font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.write { grid-column: 3 / 5; grid-row: 2; display: flex; flex-direction: column; gap: 16px; min-width: 0; padding-top: 4px; }
+.prompt { display: flex; flex-direction: column; gap: 8px; }
+.prompt label {
+  display: flex; gap: 10px; align-items: baseline;
+  font-family: var(--prompt); font-size: 16px; line-height: 1.4; color: #000;
+}
+.prompt label::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: #000; transform: translateY(-2px); }
+.hint { margin: 0 0 0 17px; font-size: 12px; color: #4b4a3a; min-height: 1.2em; }
+.hint strong { color: #101913; }
+textarea {
+  width: 100%; min-height: 96px; resize: vertical;
+  background: var(--paper-2); color: #17170f;
+  border: 1.5px solid #101913; border-radius: 10px;
+  padding: 10px 12px; font-family: var(--body); font-size: 15px; line-height: 1.5;
+}
+textarea::placeholder { color: #8a846f; }
+textarea:focus-visible { outline: 3px solid rgba(16,25,19,.25); outline-offset: 1px; background: #fffaf0; }
+.actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+button.copy {
+  background: var(--ink); color: var(--leaf); border: 0; border-radius: 8px;
+  padding: 10px 16px; font: 700 12px var(--body); letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+}
+button.copy:hover { background: #1a281f; }
+button.copy:focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; }
+.status { font-size: 12px; color: #3b3a2e; }
+#fallback { display: none; min-height: 140px; font-size: 13px; }
+#fallback.show { display: block; }
+
+footer { margin-top: 28px; border-top: 1px solid #8f8a78; padding-top: 12px; text-align: center; font-size: 10.5px; color: #6b6753; }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .top3, .write { grid-column: 1 / -1; grid-row: auto; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .scene { height: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+
+<div class="wrap">
+  <h1>¿Qué te da miedo? 😨</h1>
+  <p class="lead">¿Cuáles de estas cosas te dan miedo? Ordénalas de 0 (no me da miedo) a 5 (me aterroriza).</p>
+
+  <div class="scale" role="note">
+    <b>Escala de miedo</b>
+    <span>0 · No me da miedo</span><span class="dash">—</span><span class="hi">5 · Me aterroriza</span>
+  </div>
+
+  <div class="grid">
+
+    <article class="card" data-card="aranas">
+      <svg class="scene" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><radialGradient id="gSp" cx="50%" cy="48%" r="55%"><stop offset="0" stop-color="#f4f4f4"/><stop offset=".55" stop-color="#8d8d8d"/><stop offset="1" stop-color="#040404"/></radialGradient></defs>
+        <rect width="300" height="120" fill="#040404"/>
+        <ellipse cx="150" cy="58" rx="112" ry="52" fill="url(#gSp)" opacity=".92"/>
+        <line x1="172" y1="0" x2="172" y2="44" stroke="#151515" stroke-width="1"/>
+        <g fill="none" stroke="#090909" stroke-width="1.7" stroke-linecap="round">
+          <path d="M168 48 Q150 30 138 40"/><path d="M168 51 Q148 44 132 56"/><path d="M168 55 Q148 58 134 74"/><path d="M169 58 Q156 72 150 90"/>
+          <path d="M176 48 Q194 30 206 40"/><path d="M176 51 Q196 44 212 56"/><path d="M176 55 Q196 58 210 74"/><path d="M175 58 Q188 72 194 90"/>
+        </g>
+        <ellipse cx="172" cy="58" rx="7.5" ry="10" fill="#050505"/><circle cx="172" cy="46" r="4.5" fill="#050505"/>
+      </svg>
+      <div class="card-body">
+        <h2>Arañas <span class="em">🕷️</span></h2>
+        <div class="ctl">
+          <label for="r-aranas">Tu nivel de miedo</label>
+          <div class="row"><input type="range" id="r-aranas" min="0" max="5" step="1" value="0" data-id="aranas" data-name="Arañas" data-emoji="🕷️"><output class="badge" for="r-aranas">0</output></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-card="oscuridad">
+      <svg class="scene" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="gDk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3133"/><stop offset="1" stop-color="#0b0d0e"/></linearGradient>
+          <filter id="nDk"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix type="saturate" values="0"/></filter>
+        </defs>
+        <rect width="300" height="120" fill="url(#gDk)"/>
+        <polygon points="0,0 112,26 112,94 0,120" fill="#1c2123"/>
+        <polygon points="300,0 188,26 188,94 300,120" fill="#14181a"/>
+        <polygon points="0,120 112,94 188,94 300,120" fill="#0d1011"/>
+        <rect x="112" y="26" width="76" height="68" fill="#080909"/>
+        <rect x="146" y="32" width="8" height="58" fill="#4a5457" opacity=".45"/>
+        <rect x="52" y="30" width="22" height="62" fill="#0a0c0d" opacity=".7"/>
+        <rect width="300" height="120" filter="url(#nDk)" opacity=".16"/>
+      </svg>
+      <div class="card-body">
+        <h2>Oscuridad <span class="em">🟣</span></h2>
+        <div class="ctl">
+          <label for="r-oscuridad">Tu nivel de miedo</label>
+          <div class="row"><input type="range" id="r-oscuridad" min="0" max="5" step="1" value="0" data-id="oscuridad" data-name="Oscuridad" data-emoji="🟣"><output class="badge" for="r-oscuridad">0</output></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-card="fantasmas">
+      <svg class="scene" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="gGh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1b20"/><stop offset="1" stop-color="#110709"/></linearGradient>
+          <linearGradient id="gGs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a60"/><stop offset="1" stop-color="#3a2024"/></linearGradient>
+        </defs>
+        <rect width="300" height="120" fill="url(#gGh)"/>
+        <rect x="40" y="0" width="14" height="120" fill="#220f12" opacity=".7"/><rect x="246" y="0" width="14" height="120" fill="#220f12" opacity=".7"/>
+        <path d="M118 120 L121 56 Q121 26 150 26 Q179 26 182 56 L185 120 Q175 111 167 120 Q158 111 150 120 Q141 111 133 120 Q125 111 118 120 Z" fill="url(#gGs)" opacity=".65"/>
+        <ellipse cx="140" cy="60" rx="3.2" ry="5.5" fill="#0a0406"/><ellipse cx="160" cy="60" rx="3.2" ry="5.5" fill="#0a0406"/>
+        <ellipse cx="150" cy="112" rx="70" ry="9" fill="#e8c8cc" opacity=".05"/>
+      </svg>
+      <div class="card-body">
+        <h2>Fantasmas <span class="em">👻</span></h2>
+        <div class="ctl">
+          <label for="r-fantasmas">Tu nivel de miedo</label>
+          <div class="row"><input type="range" id="r-fantasmas" min="0" max="5" step="1" value="0" data-id="fantasmas" data-name="Fantasmas" data-emoji="👻"><output class="badge" for="r-fantasmas">0</output></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-card="casas">
+      <svg class="scene" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id="gMa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090c14"/><stop offset="1" stop-color="#232a38"/></linearGradient></defs>
+        <rect width="300" height="120" fill="url(#gMa)"/>
+        <g fill="#04060a">
+          <rect x="70" y="62" width="160" height="44"/>
+          <rect x="138" y="38" width="24" height="30"/><polygon points="136,38 150,16 164,38"/>
+          <rect x="76" y="48" width="16" height="20"/><polygon points="74,48 84,32 94,48"/>
+          <rect x="208" y="48" width="16" height="20"/><polygon points="206,48 216,32 226,48"/>
+          <rect x="98" y="54" width="8" height="12"/><rect x="194" y="54" width="8" height="12"/>
+          <rect x="0" y="104" width="300" height="16" fill="#030406"/>
+        </g>
+        <g fill="#cdb67f" opacity=".5">
+          <rect x="147" y="46" width="3" height="5"/><rect x="108" y="74" width="4" height="6"/><rect x="188" y="76" width="4" height="6"/><rect x="80" y="55" width="3" height="5"/>
+        </g>
+        <g stroke="#04060a" stroke-width="1.4"><line x1="30" y1="104" x2="30" y2="86"/><line x1="40" y1="104" x2="40" y2="86"/><line x1="50" y1="104" x2="50" y2="86"/><line x1="250" y1="104" x2="250" y2="86"/><line x1="260" y1="104" x2="260" y2="86"/><line x1="270" y1="104" x2="270" y2="86"/></g>
+        <ellipse cx="150" cy="108" rx="150" ry="9" fill="#b8c2cc" opacity=".12"/>
+      </svg>
+      <div class="card-body">
+        <h2>Casas abandonadas <span class="em">🏚️</span></h2>
+        <div class="ctl">
+          <label for="r-casas">Tu nivel de miedo</label>
+          <div class="row"><input type="range" id="r-casas" min="0" max="5" step="1" value="0" data-id="casas" data-name="Casas abandonadas" data-emoji="🏚️"><output class="badge" for="r-casas">0</output></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-card="cementerios">
+      <svg class="scene" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs><linearGradient id="gCe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090e0b"/><stop offset="1" stop-color="#1b2621"/></linearGradient></defs>
+        <rect width="300" height="120" fill="url(#gCe)"/>
+        <g stroke="#050806" stroke-width="3" fill="none" stroke-linecap="round">
+          <path d="M20 100 V50 M20 70 L8 58 M20 62 L32 48"/><path d="M270 100 V40 M270 64 L284 50 M270 56 L258 44"/>
+        </g>
+        <g fill="#0c110e" stroke="#2b372f" stroke-width="1">
+          <path d="M60 106 V82 Q60 72 70 72 Q80 72 80 82 V106 Z"/>
+          <path d="M120 108 V86 Q120 78 128 78 Q136 78 136 86 V108 Z"/>
+          <path d="M190 106 V80 Q190 70 201 70 Q212 70 212 80 V106 Z"/>
+        </g>
+        <g fill="#0c110e" stroke="#2b372f" stroke-width="1"><rect x="160" y="74" width="4" height="30"/><rect x="153" y="82" width="18" height="4"/></g>
+        <rect x="0" y="100" width="300" height="20" fill="#050806"/>
+        <ellipse cx="150" cy="104" rx="150" ry="8" fill="#b8c8bc" opacity=".1"/>
+        <g fill="#d6e6a8" opacity=".4"><circle cx="45" cy="92" r="1"/><circle cx="100" cy="98" r="1"/><circle cx="230" cy="94" r="1.2"/><circle cx="255" cy="88" r="1"/><circle cx="175" cy="96" r=".9"/></g>
+      </svg>
+      <div class="card-body">
+        <h2>Cementerios <span class="em">⚰️</span></h2>
+        <div class="ctl">
+          <label for="r-cementerios">Tu nivel de miedo</label>
+          <div class="row"><input type="range" id="r-cementerios" min="0" max="5" step="1" value="0" data-id="cementerios" data-name="Cementerios" data-emoji="⚰️"><output class="badge" for="r-cementerios">0</output></div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="top3" aria-live="polite">
+      <header>
+        <span class="ico" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C7.6 3 5 6 5 9.6c0 2.3 1 3.8 2.5 4.8V18h9v-3.6c1.5-1 2.5-2.5 2.5-4.8C19 6 16.4 3 12 3z"/><circle cx="9.3" cy="10" r="1.2"/><circle cx="14.7" cy="10" r="1.2"/><path d="M10 21v-3M14 21v-3"/></svg>
+        </span>
+        <div><h3>TOP 3</h3><p>Tus miedos más intensos</p></div>
+      </header>
+      <div id="top-empty" class="empty">Mueve los controles para revelar qué se esconde en lo más alto de tu ranking.</div>
+      <ol id="top-list" hidden></ol>
+    </aside>
+
+    <section class="write" aria-label="Tus respuestas">
+      <div class="prompt">
+        <label for="why">Explica por qué elegiste el número más alto.</label>
+        <p class="hint" id="why-hint">Primero mueve los controles de arriba.</p>
+        <textarea id="why" rows="4" placeholder="Escribe aquí tu explicación…"></textarea>
+      </div>
+      <div class="prompt">
+        <label for="add">¿Qué añadirías a la lista?</label>
+        <textarea id="add" rows="3" placeholder="Por ejemplo: otra cosa que te da miedo y por qué…"></textarea>
+      </div>
+      <div class="actions">
+        <button type="button" class="copy" id="copy">Copiar mis respuestas</button>
+        <span class="status" id="status" role="status"></span>
+      </div>
+      <textarea id="fallback" readonly aria-label="Texto para copiar"></textarea>
+    </section>
+  </div>
+
+  <footer>Selecciona una puntuación y descubre qué te acecha más.</footer>
+</div>
+
+<script>
+(function () {
+  var KEY = 'que-te-da-miedo-v1';
+  var ranges = Array.prototype.slice.call(document.querySelectorAll('input[type=range]'));
+  var why = document.getElementById('why');
+  var add = document.getElementById('add');
+  var hint = document.getElementById('why-hint');
+  var topList = document.getElementById('top-list');
+  var topEmpty = document.getElementById('top-empty');
+  var statusEl = document.getElementById('status');
+  var fallback = document.getElementById('fallback');
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function save() {
+    var data = { scores: {}, why: why.value, add: add.value };
+    ranges.forEach(function (r) { data.scores[r.dataset.id] = +r.value; });
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function items() {
+    return ranges.map(function (r, i) {
+      return { id: r.dataset.id, name: r.dataset.name, emoji: r.dataset.emoji, score: +r.value, i: i };
+    });
+  }
+  function ranked() {
+    return items().filter(function (x) { return x.score > 0; })
+      .sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+  }
+
+  function render() {
+    ranges.forEach(function (r) {
+      var v = +r.value;
+      r.style.setProperty('--p', (v / 5 * 100) + '%');
+      r.setAttribute('aria-valuetext', v + ' de 5');
+      r.parentNode.querySelector('output').textContent = v;
+    });
+    var rk = ranked();
+    var top = rk.slice(0, 3);
+    document.querySelectorAll('.card').forEach(function (c) {
+      c.classList.toggle('is-top', top.length > 0 && c.dataset.card === top[0].id);
+    });
+    topList.textContent = '';
+    if (!top.length) {
+      topList.hidden = true; topEmpty.hidden = false;
+      hint.textContent = 'Primero mueve los controles de arriba.';
+    } else {
+      topEmpty.hidden = true; topList.hidden = false;
+      top.forEach(function (x, k) {
+        var li = document.createElement('li');
+        var n = document.createElement('span'); n.className = 'n'; n.textContent = k + 1;
+        var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = x.emoji + ' ' + x.name;
+        var sc = document.createElement('span'); sc.className = 'sc'; sc.textContent = x.score + '/5';
+        li.appendChild(n); li.appendChild(nm); li.appendChild(sc);
+        topList.appendChild(li);
+      });
+      var max = rk[0].score;
+      var names = rk.filter(function (x) { return x.score === max; }).map(function (x) { return x.name; });
+      hint.textContent = '';
+      var s = document.createElement('span');
+      s.textContent = 'Tu número más alto: ';
+      var b = document.createElement('strong');
+      b.textContent = names.join(' y ') + ' (' + max + ')';
+      hint.appendChild(s); hint.appendChild(b);
+    }
+    save();
+  }
+
+  function summary() {
+    var all = items().sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+    var lines = ['Mi escala de miedo (0–5):'];
+    all.forEach(function (x, k) { lines.push((k + 1) + '. ' + x.name + ': ' + x.score); });
+    lines.push('', 'Por qué elegí el número más alto:', why.value.trim() || '(sin respuesta)');
+    lines.push('', 'Lo que añadiría a la lista:', add.value.trim() || '(sin respuesta)');
+    return lines.join('\n');
+  }
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var text = summary();
+    function showFallback() {
+      fallback.value = text; fallback.classList.add('show'); fallback.focus(); fallback.select();
+      statusEl.textContent = 'Selecciona el texto y cópialo.';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () {
+        fallback.classList.remove('show');
+        statusEl.textContent = 'Copiado. Pégalo en el chat de la clase.';
+      }, showFallback);
+    } catch (e) { showFallback(); }
+  });
+
+  ranges.forEach(function (r) { r.addEventListener('input', render); });
+  why.addEventListener('input', save);
+  add.addEventListener('input', save);
+
+  var d = load();
+  if (d.scores) ranges.forEach(function (r) { var v = d.scores[r.dataset.id]; if (typeof v === 'number' && v >= 0 && v <= 5) r.value = v; });
+  if (typeof d.why === 'string') why.value = d.why;
+  if (typeof d.add === 'string') add.value = d.add;
+  render();
+})();
+</script>
+
+</body></html>
