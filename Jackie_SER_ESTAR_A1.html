@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8f3ff">
+<title>Spanish with Jackie · SER & ESTAR · A1</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+:root{--ink:#241b3e;--muted:#736a8e;--purple:#7754bf;--purple-2:#9a78d4;--lilac:#f3ebff;--lilac-border:#e8dafd;--cream:#fffbf7;--rose:#ffe3ee;--mint:#e4f7ef;--teal:#267a6b;--line:#e8e2f1;--white:#fff;--shadow:0 12px 36px rgba(73,45,121,.09)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:radial-gradient(circle at 7% 3%,#f4eaff 0,transparent 28%),radial-gradient(circle at 100% 10%,#fbeaf7 0,transparent 24%),#fcfafd;font-family:'DM Sans',Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.46}
+button:focus-visible,input:focus-visible{outline:3px solid #ac91e2;outline-offset:3px}
+#shell{max-width:1250px;margin:auto;padding:24px clamp(16px,3vw,36px) 60px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-family:Outfit,Arial,sans-serif;font-size:20px;letter-spacing:-.02em}
+.logo{width:41px;height:41px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(140deg,#e6d3ff,#f8cce2);font-size:23px}
+.nav-tools{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.nav-btn,.btn{border:1.5px solid #e5dbf4;border-radius:15px;background:white;color:#56368c;padding:11px 17px;font-weight:800;transition:transform .15s,box-shadow .15s,border-color .15s}
+.nav-btn:hover,.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(89,55,147,.14)}
+.btn.primary{background:linear-gradient(125deg,#8157ca,#6441b1);border-color:#6c48b7;color:white}
+.btn.secondary{background:#f5efff;color:#57348e}
+.btn.ghost{background:transparent}
+.btn.success{background:#e8f7ee;border-color:#bfe9d3;color:#12684c}
+.btn.large{padding:16px 27px;font-size:19px;border-radius:17px}
+.progress-nav{display:flex;align-items:center;gap:12px;width:100%;max-width:360px}
+.progress-track{flex:1;height:10px;border-radius:20px;background:#eae2f3;overflow:hidden}
+.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#ae87e2,#7455c2);transition:width .3s}
+.progress-label{color:#6b5b83;font-weight:800;font-size:13px;white-space:nowrap}
+.view{animation:rise .24s ease-out}
+@keyframes rise{from{opacity:.6;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{border:1.5px solid #e5d1f8;border-radius:30px;padding:clamp(25px,5vw,56px);background:linear-gradient(132deg,#f9e7f7,#eee6ff 57%,#eaf5ff);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero:before{content:'✨';position:absolute;right:32px;top:24px;font-size:80px;opacity:.5}
+.hero:after{content:'💬';position:absolute;right:64px;bottom:23px;font-size:80px;opacity:.4}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;text-transform:uppercase;font-size:12px;letter-spacing:.12em;font-weight:900;color:#70529d;background:#fff9;padding:8px 12px;border-radius:100px}
+h1,h2,h3,p{margin-top:0}
+h1,h2,h3{font-family:Outfit,'DM Sans',Arial,sans-serif;letter-spacing:-.025em}
+h1{font-size:clamp(41px,6.5vw,78px);max-width:850px;line-height:1.06;margin:18px 0 14px;color:#29183f}
+.hero .subtitle{font-size:clamp(19px,2.2vw,25px);color:#5b4e76;max-width:750px;line-height:1.47}
+.pillrow{display:flex;flex-wrap:wrap;gap:9px;margin:25px 0 24px}
+.pill{border:1px solid #ddceef;border-radius:100px;background:#fffb;padding:9px 13px;font-size:14px;font-weight:800;color:#694a9a}
+.start-actions{display:flex;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
+.section-heading{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:28px 0 14px;flex-wrap:wrap}
+.section-heading h2{font-size:29px;margin:0}
+.block-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.block{border-radius:21px;border:1.5px solid var(--line);background:#fff;box-shadow:var(--shadow);padding:18px;min-height:165px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:transform .16s}
+.block:hover{transform:translateY(-3px)}
+.block .emoji{font-size:33px}.block strong{font-family:Outfit,sans-serif;font-size:20px;line-height:1.12}.block small{color:var(--muted);font-weight:600;font-size:13px}
+.block .mini-progress{margin-top:auto;height:6px;border-radius:20px;background:#eee9f6;overflow:hidden}
+.block .mini-progress span{display:block;height:100%;border-radius:20px;background:#8b66d0}
+.practice-layout{display:grid;grid-template-columns:minmax(0,1fr) 295px;gap:18px;align-items:start}
+.main-card,.sidebar,.results-card{border:1.5px solid var(--line);background:white;border-radius:28px;box-shadow:var(--shadow)}
+.main-card{padding:clamp(19px,3vw,34px);min-height:590px}
+.sidebar{padding:21px;position:sticky;top:14px}
+.sidebar h3{font-size:24px;margin:10px 0}
+.sidebar p,.sidebar li{line-height:1.6;color:#665877;font-size:15px}
+.sidebar .rule{background:#f7f2fd;border:1px solid #e8dcf8;border-radius:15px;padding:12px;font-size:15px;margin:9px 0}
+.sidebar .rule strong{color:#6846ae}
+.stephead{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.stepbadge{border-radius:100px;padding:8px 13px;color:#6944aa;background:#f3ebff;font-size:13px;font-weight:900;letter-spacing:.04em}
+.stepno{font-size:14px;font-weight:800;color:#706488}
+.stepstrip{height:7px;border-radius:100px;background:#f1ebf7;margin:14px 0 24px;overflow:hidden}
+.stepstrip div{height:100%;background:linear-gradient(90deg,#9f79de,#7c52bd);border-radius:100px;transition:width .3s}
+.question-title{font-size:clamp(28px,3.5vw,42px);line-height:1.15;margin:0 0 11px}
+.instruction{font-size:clamp(17px,2vw,21px);font-weight:700;color:#60546f;line-height:1.5;margin:0 0 17px}
+.activity-body{min-height:240px}.visual-row{display:flex;gap:16px;align-items:center;margin:0 0 22px;background:linear-gradient(110deg,#fbf5ff,#fffaf4);border:1px solid #efe1fa;border-radius:22px;padding:17px 21px}
+.bigemoji{font-size:clamp(61px,8vw,99px);line-height:1;flex:0 0 auto}
+.visual-row strong{font-size:20px;font-weight:800;display:block}
+.visual-row span{color:var(--muted);font-size:16px;display:block;margin-top:3px}
+.sentence-card{border:1.5px solid #dfcff4;border-radius:21px;background:#fbf7ff;padding:20px 23px;margin:17px 0;font-family:Outfit,'DM Sans',sans-serif;font-size:clamp(24px,3.5vw,39px);font-weight:800;line-height:1.43}
+.word-input{min-width:110px;max-width:min(200px,47vw);width:150px;padding:8px 12px;border:2px solid #c3a4ef;border-radius:13px;background:#fff;color:#321f50;font-weight:800;text-align:center;font-size:inherit}
+.dialogue .word-input{width:125px;min-width:90px;max-width:135px;padding:6px 9px;font-size:inherit}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.option{border:2px solid #e9e1f3;background:#fff;border-radius:17px;text-align:left;padding:17px 18px;color:#2e2343;font-weight:800;font-size:clamp(18px,2vw,23px);min-height:66px;display:flex;align-items:center;gap:13px;transition:transform .14s,border-color .14s,background .14s}
+.option .letter{background:#f4eefb;color:#805cba;border-radius:9px;min-width:30px;text-align:center;padding:5px;font-size:14px}
+.option:hover:not(:disabled){border-color:#ba9fe2;transform:translateY(-1px)}
+.option.chosen{background:#f0e6ff;border-color:#8857d2}
+.option.good{border-color:#36ab85;background:#eaf9f3}
+.wordbank{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.word-token{border:2px solid #dccafa;background:#fff;border-radius:14px;padding:12px 20px;font-size:22px;font-weight:800;color:#57318e}.word-token.used{opacity:.32}.word-token.slot{background:#efe6ff}
+.selected-row{display:flex;gap:9px;min-height:75px;align-items:center;flex-wrap:wrap;border:2px dashed #d8c8f1;border-radius:17px;padding:12px;margin:18px 0}
+.selected-row .empty{color:#9b91ac;font-weight:700}
+.dialogue{display:grid;gap:10px;margin:18px 0}
+.bubble{max-width:93%;padding:16px 21px;border-radius:22px;background:#f6efff;font-size:clamp(19px,2.2vw,25px);line-height:2.1;font-weight:750;border:1px solid #e9ddfc}
+.bubble:nth-child(even){margin-left:auto;background:#e9f7f0;border-color:#d2eadd}
+.bubble .speaker{font-size:13px;display:block;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#7957ae;font-weight:900;margin-bottom:6px}
+.match-board{position:relative;margin:18px 0;min-height:315px;border:1px solid #ede6f4;border-radius:20px;padding:14px;background:#fdfbff;display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(45px,8vw,95px)}
+.match-col{display:grid;gap:12px;z-index:2;position:relative}
+.match-item{border:2px solid #dcd0ef;background:white;border-radius:14px;padding:14px 10px;font-weight:800;font-size:clamp(15px,1.7vw,19px);min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;transition:.14s}
+.match-item:hover:not(:disabled){border-color:#aa8bdc}.match-item.selected{border-color:#875dd0;background:#e9ddff}.match-item.connected{border-color:#8bcfb2;background:#e9f9ef;color:#2b604e}.match-item:disabled,.option:disabled{opacity:1;cursor:default}
+.match-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.match-note{color:#746589;font-size:14px;margin-top:7px}
+.feedback{margin-top:21px;border:1.5px solid #b2e3cd;background:linear-gradient(160deg,#ecfff4,#f7fff9);padding:20px;border-radius:20px;animation:rise .22s}
+.feedback.bad{border-color:#ead4b6;background:#fff9f0}
+.feedback .fb-title{font-weight:900;font-family:Outfit,sans-serif;font-size:23px;display:flex;gap:9px;align-items:center;margin-bottom:10px}
+.feedback .correct-phrase{font-weight:900;font-size:clamp(21px,2.4vw,28px);color:#245c49;margin-bottom:5px}
+.feedback .translation{font-style:italic;font-size:17px;color:#586e62;margin-bottom:13px}
+.feedback .why{background:#fff;border:1px solid #caeada;border-radius:13px;padding:13px;font-size:16px;line-height:1.55}
+.feedback.bad .why{border-color:#edddcb}
+.feedback .accent{background:#fffbdd;border-radius:9px;padding:9px 12px;margin-top:10px;font-size:15px}
+.feedback strong{color:#25684e}
+.footer-actions{border-top:1px solid #ede7f3;margin-top:24px;padding-top:18px;display:flex;align-items:center;gap:11px;justify-content:space-between;flex-wrap:wrap}
+.footer-actions .leftbuttons{display:flex;gap:9px}.footer-actions .rightbuttons{display:flex;gap:9px}
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999}
+.confet{position:absolute;top:-30px;width:10px;height:16px;border-radius:3px;animation:fall var(--dur) linear forwards;transform:rotate(0deg)}
+@keyframes fall{to{top:108vh;transform:translateX(var(--dx)) rotate(var(--rot));opacity:.1}}
+.small-hint{background:#f8f3ff;color:#66527f;border:1px solid #e9dafb;border-radius:14px;padding:11px 14px;font-weight:600;line-height:1.5;margin:15px 0}
+.results-card{padding:clamp(22px,5vw,45px)}
+.results-title{font-size:clamp(36px,5vw,60px);line-height:1.1}.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:23px 0}.stat{background:#f7f1ff;border-radius:19px;padding:18px;text-align:center}.stat strong{font-family:Outfit,sans-serif;font-size:35px;color:#6c43b4;display:block}.stat span{font-size:13px;color:#6b5c86;font-weight:800}
+.review-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:16px 0}.review-num{padding:11px 9px;border-radius:12px;border:1px solid #e0d1f6;background:#fff;color:#60418e;font-weight:900}.review-num.done{background:#e5f8ed;border-color:#9ed8bb;color:#1e775a}.review-num.needs{background:#fff5e9;border-color:#efc797}
+.legend{font-size:13px;color:var(--muted);margin:8px 0}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#302443;color:white;border-radius:14px;padding:11px 18px;font-weight:800;z-index:999;display:none;box-shadow:var(--shadow)}
+@media(max-width:1100px){.block-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.practice-layout{grid-template-columns:minmax(0,1fr) 230px}}
+@media(max-width:850px){.practice-layout{grid-template-columns:1fr}.sidebar{position:static}.block-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero:after{display:none}}
+@media(max-width:620px){#shell{padding:13px 12px 40px}.nav{margin-bottom:14px}.brand{font-size:17px}.progress-nav{width:100%;max-width:none}.hero{padding:25px 22px}.hero:before{font-size:42px;right:16px}.block-grid{grid-template-columns:1fr 1fr}.block{padding:14px;min-height:135px}.block strong{font-size:17px}.main-card{padding:18px 14px;min-height:auto;border-radius:22px}.options{grid-template-columns:1fr}.sentence-card{padding:17px 13px}.word-input{width:105px;min-width:85px}.dialogue .word-input{width:87px;min-width:75px}.bubble{max-width:100%;padding:14px;line-height:2.35}.visual-row{padding:15px 12px}.match-board{column-gap:35px;padding:8px}.match-item{padding:8px 5px;min-height:71px;font-size:14px}.stat-row{grid-template-columns:repeat(3,1fr)}.stat{padding:12px 6px}.stat strong{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="shell">
+ <header class="nav">
+  <div class="brand"><span class="logo">✦</span> <span>Spanish with Jackie</span></div>
+  <div class="nav-tools">
+   <button class="nav-btn" id="homeBtn" type="button">⌂ Home</button>
+   <button class="nav-btn" id="soundBtn" type="button" aria-label="Toggle celebration sounds">🔊 Sound on</button>
+  </div>
+  <div class="progress-nav"><span class="progress-label" id="progressText">0 / 20</span><div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div></div>
+ </header>
+ <main id="app" aria-live="polite"></main>
+</div>
+<div id="toast" role="status"></div>
+<div id="confetti" aria-hidden="true"></div>
+<script>
+'use strict';
+const BLOCKS=[
+ {name:'ESTAR',sub:'I / you / he / she / we / they',icon:'😊',range:[0,4],color:'#f6e9ff',side:'ESTAR describes how someone feels or their condition.'},
+ {name:'Emotions',sub:'Adjectives + intensity',icon:'😌',range:[5,8],color:'#fcecf3',side:'Adjectives can change ending. Muy, bastante and un poco come before the adjective.'},
+ {name:'SER',sub:'Origin, identity, work',icon:'🌎',range:[9,13],color:'#e7f5f1',side:'SER identifies people, where they are from and their professions.'},
+ {name:'Gender & plural',sub:'-o/-a and -os',icon:'👥',range:[14,16],color:'#fdf2da',side:'Adjectives and nationalities agree with the person or noun they describe.'},
+ {name:'Real dialogues',sub:'Complete short conversations',icon:'💬',range:[17,19],color:'#eaf0fe',side:'Use SER and ESTAR in natural conversations. Read the entire exchange first.'}
+];
+const TASKS=[
+ {id:1,block:0,type:'choice',title:'I am tired',instruction:'Choose the correct form of ESTAR to say: “I am tired.”',emoji:'😴',context:'How you feel today',spanish:['Yo ',' cansado.'],choices:['estoy','estás','está'],answer:0,full:'Yo estoy cansado.',en:'I am tired.',why:'“Yo” means “I”. Use ESTOY for “I am” when describing a feeling or condition.',hint:'Think: Yo → estoy.'},
+ {id:2,block:0,type:'fill',title:'She is happy',instruction:'Write the missing verb. How would you say “She is happy”?',emoji:'😊',context:'A happy woman',spanish:['Ella ',' contenta.'],answers:['está'],full:'Ella está contenta.',en:'She is happy.',why:'“Ella” means “she”. With ESTAR, él / ella / usted use ESTÁ. “Contenta” is the feminine adjective.',hint:'She = ella. The ESTAR form for she ends in -á.'},
+ {id:3,block:0,type:'match',title:'Connect the sentences',instruction:'Click one English sentence, then click its Spanish translation. Connect all four pairs.',emoji:'🔗',context:'Connect the meanings',pairs:[['I am calm.','Estoy tranquilo.'],['You are busy.','Estás ocupado.'],['She is happy.','Ella está contenta.'],['We are relaxed.','Estamos relajados.']],rightOrder:[2,0,3,1],full:'Estoy tranquilo. · Estás ocupado. · Ella está contenta. · Estamos relajados.',en:'I am calm. · You are busy. · She is happy. · We are relaxed.',why:'ESTAR changes with the subject: yo estoy, tú estás, ella está, nosotros estamos.',hint:'First look for “I”, “you”, “she”, or “we”.'},
+ {id:4,block:0,type:'choice',title:'We are stressed',instruction:'Choose the correct verb for “We are stressed” (a group of women).',emoji:'😵‍💫',context:'A group of women at work',spanish:['Nosotras ',' estresadas.'],choices:['están','estamos','estoy'],answer:1,full:'Nosotras estamos estresadas.',en:'We are stressed.',why:'“Nosotras” means “we” (women), so ESTAMOS is the verb. “Estresadas” is feminine plural.',hint:'Nosotras = we. Which verb form belongs to WE?'},
+ {id:5,block:0,type:'fill',title:'They are tired',instruction:'Write the correct form of ESTAR for “They are tired.”',emoji:'🥱',context:'Two tired friends',spanish:['Ellos ',' cansados.'],answers:['están'],full:'Ellos están cansados.',en:'They are tired.',why:'“Ellos” means “they”. Use ESTÁN. “Cansados” is plural because the subject is plural.',hint:'Ellos = they; the verb form ends in -án.'},
+ {id:6,block:1,type:'choice',title:'How do you feel at work?',instruction:'Look at the emoji. Choose the adjective meaning “stressed”.',emoji:'😵‍💫',context:'At work',spanish:['Estoy muy ',' .'],choices:['relajado','estresado','contento'],answer:1,full:'Estoy muy estresado.',en:'I am very stressed.',why:'ESTRESADO means stressed. “Muy” means “very” and goes before the adjective.',hint:'Which adjective means “stressed”?'},
+ {id:7,block:1,type:'fill',title:'She is busy',instruction:'Write the correct adjective for a woman. “She is busy.”',emoji:'👩‍💻',context:'A woman working',spanish:['Ella está ',' .'],answers:['ocupada'],full:'Ella está ocupada.',en:'She is busy.',why:'The verb ESTÁ is the same for he or she. The adjective changes: ocupado (masculine) → ocupada (feminine).',hint:'The adjective describes a woman. Change the final -o to -a.'},
+ {id:8,block:1,type:'order',title:'Put the words in order',instruction:'Build the Spanish sentence for “I am very stressed.” Click the words in the correct order.',emoji:'💼',context:'A stressful day',tokens:['estresado.','muy','Estoy'],answerOrder:[2,1,0],full:'Estoy muy estresado.',en:'I am very stressed.',why:'The usual order is: ESTOY + intensity word + adjective. Example: estoy + muy + estresado.',hint:'Start with the verb ESTOY. MUY goes immediately before the adjective.'},
+ {id:9,block:1,type:'choice',title:'Not tired at all',instruction:'Choose the sentence that means “I am not tired at all.”',emoji:'😎',context:'Feeling rested after vacation',choices:['No estoy nada cansado.','Estoy nada cansado.','No muy estoy cansado.'],answer:0,full:'No estoy nada cansado.',en:'I am not tired at all.',why:'NO goes before ESTOY. NADA strengthens the negative: “No estoy cansado” = not tired; “No estoy nada cansado” = not tired at all.',hint:'The correct pattern is NO + ESTOY + NADA + adjective.'},
+ {id:10,block:2,type:'fill',title:'Where are you from?',instruction:'Write the correct form of SER: “I am from the United States.”',emoji:'🇺🇸',context:'Your country of origin',spanish:['Yo ',' de Estados Unidos.'],answers:['soy'],full:'Yo soy de Estados Unidos.',en:'I am from the United States.',why:'Use SOY with YO to talk about your origin. In Spanish we say SOY DE + place (not “soy en”).',hint:'Yo + SER = soy.'},
+ {id:11,block:2,type:'choice',title:'She is Peruvian',instruction:'Choose the correct form of SER. “She is Peruvian.”',emoji:'🇵🇪',context:'Nationality',spanish:['Ella ',' peruana.'],choices:['está','soy','es'],answer:2,full:'Ella es peruana.',en:'She is Peruvian.',why:'Use SER for nationality. Ella = she, so ES. “Peruana” is feminine.',hint:'Nationality uses SER. Ella + SER = ?'},
+ {id:12,block:2,type:'match',title:'SER: Match English and Spanish',instruction:'Connect each English sentence with the Spanish sentence that means the same thing.',emoji:'🌎',context:'Origins and identity',pairs:[['I am from Peru.','Soy de Perú.'],['You are from Lima.','Eres de Lima.'],['We are from Ohio.','Somos de Ohio.'],['They are from Mexico.','Son de México.']],rightOrder:[3,1,0,2],full:'Soy de Perú. · Eres de Lima. · Somos de Ohio. · Son de México.',en:'I am from Peru. · You are from Lima. · We are from Ohio. · They are from Mexico.',why:'SER for origin: yo soy, tú eres, nosotros somos, ellos son. Always use DE before the place.',hint:'Find the subject first: I, you, we, they.'},
+ {id:13,block:2,type:'choice',title:'One or many?',instruction:'Choose the correct verb. “The tacos are from Mexico.”',emoji:'🌮',context:'Tacos: more than one',spanish:['Los tacos ',' de México.'],choices:['es','son','estoy'],answer:1,full:'Los tacos son de México.',en:'The tacos are from Mexico.',why:'“Los tacos” is plural (more than one taco), so use SON. For one taco: “El taco es de México”.',hint:'Los tacos = they (plural). Which form of SER goes with THEY?'},
+ {id:14,block:2,type:'fill',title:'I am a lawyer',instruction:'Complete this answer to “What do you do for a living?” Write only the verb.',emoji:'⚖️',context:'¿A qué te dedicas?',spanish:['',' abogado.'],answers:['soy'],full:'Soy abogado.',en:'I am a lawyer.',why:'Use SER for a profession: SOY ABOGADO. In Spanish, when simply naming a profession, we usually omit “un/una”.',hint:'I am = soy (for identity and profession).'},
+ {id:15,block:3,type:'choice',title:'He or she?',instruction:'Choose the correct sentence for “She is stressed.”',emoji:'👩😣',context:'Feminine adjective',choices:['Ella estoy estresada.','Ella está estresado.','Ella está estresada.'],answer:2,full:'Ella está estresada.',en:'She is stressed.',why:'ELLA uses ESTÁ. Only the adjective changes according to gender: estresado → estresada.',hint:'The verb is ESTÁ, but the adjective must end in -a.'},
+ {id:16,block:3,type:'choice',title:'Nationality: -o → -a',instruction:'Choose the correct nationality for a woman from Peru.',emoji:'👩🇵🇪',context:'A woman from Peru',spanish:['Ella es ',' .'],choices:['peruanos','peruana','peruano'],answer:1,full:'Ella es peruana.',en:'She is Peruvian.',why:'Many nationalities ending in -o change to -a for a woman: peruano → peruana.',hint:'Ella = she. What ending replaces -o?'},
+ {id:17,block:3,type:'fill',title:'Plural adjectives',instruction:'Write the plural adjective to say “The tacos are Mexican.”',emoji:'🌮🌮',context:'More than one taco',spanish:['Los tacos son ',' .'],answers:['mexicanos'],full:'Los tacos son mexicanos.',en:'The tacos are Mexican.',why:'Tacos is masculine plural. The adjective also becomes masculine plural: mexicano → mexicanos. SER is SON with a plural subject.',hint:'Masculine plural usually adds -s: mexicano → ?'},
+ {id:18,block:4,type:'dialog',title:'Dialogue: How are you?',instruction:'Fill in both blanks with the correct forms of ESTAR.',emoji:'👋😊',context:'Meeting someone',lines:[{speaker:'Person A',segments:['¡Hola! ¿Cómo ', ' hoy?'],blank:0},{speaker:'Person B',segments:['', ' un poco cansado, pero bien.'],blank:1},{speaker:'Person A',text:'¡Entiendo! Que tengas un buen día.'}],answers:[['estás'],['estoy']],full:'A: ¿Cómo estás hoy?  B: Estoy un poco cansado, pero bien.',en:'A: How are you today?  B: I’m a little tired, but okay.',why:'A is asking “you” → ESTÁS. B answers about “I” → ESTOY.',hint:'First blank = you are. Second blank = I am.'},
+ {id:19,block:4,type:'dialog',title:'Dialogue: Where are you from?',instruction:'Fill the three blanks with forms of SER.',emoji:'🌎💬',context:'Talking about origin',lines:[{speaker:'Person A',segments:['¿De dónde ', '?'],blank:0},{speaker:'Person B',segments:['', ' de Estados Unidos.'],blank:1},{speaker:'Person A',text:'¿Y tu pareja?'},{speaker:'Person B',segments:['Ella ', ' de Lima.'],blank:2}],answers:[['eres'],['soy'],['es']],full:'A: ¿De dónde eres?  B: Soy de Estados Unidos.  A: ¿Y tu pareja?  B: Ella es de Lima.',en:'A: Where are you from?  B: I am from the United States.  A: And your partner?  B: She is from Lima.',why:'Question to YOU → ERES. Answer about I → SOY. Talking about SHE → ES. We use SER + DE + origin.',hint:'Use three different forms for you, I, and she.'},
+ {id:20,block:4,type:'dialog',title:'Final dialogue: Feelings and work',instruction:'Complete this real-life conversation. Choose between SER and ESTAR according to the meaning.',emoji:'⚖️🗣️',context:'Getting to know someone',lines:[{speaker:'Person A',text:'¿A qué te dedicas?'},{speaker:'Person B',segments:['', ' abogado.'],blank:0},{speaker:'Person A',segments:['¿Y cómo ', ' hoy?'],blank:1},{speaker:'Person B',segments:['', ' bastante ocupado.'],blank:2},{speaker:'Person A',segments:['¿Tu pareja ', ' de Lima?'],blank:3},{speaker:'Person B',text:'¡Sí! Ella es peruana.'}],answers:[['soy'],['estás'],['estoy'],['es']],full:'B: Soy abogado.  A: ¿Y cómo estás hoy?  B: Estoy bastante ocupado.  A: ¿Tu pareja es de Lima?',en:'B: I’m a lawyer.  A: And how are you today?  B: I’m quite busy.  A: Is your partner from Lima?',why:'Profession → SOY (SER). Asking YOU about feelings → ESTÁS. I feel busy → ESTOY. Partner’s origin → ES (SER).',hint:'Ask yourself: is this identity/origin (SER) or a current feeling (ESTAR)?'}
+];
+const STORAGE='spanish_with_jackie_refuerzo_estar_ser_v1';
+let state={view:'home',current:0,sound:true,completed:{},attempts:{},firstTry:{},draft:{},match:{},order:{}};
+try{const old=JSON.parse(localStorage.getItem(STORAGE)||'{}');state={...state,...old,view:'home',completed:old.completed||{},attempts:old.attempts||{},firstTry:old.firstTry||{},draft:old.draft||{},match:old.match||{},order:old.order||{}}}catch(e){}
+let selectedMatch=null;let incorrectMatch='';let matchExplain='';
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').trim().toLowerCase().replace(/[.!?¿¡,]+/g,'').replace(/\s+/g,' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const accentDiff=(entered,answer)=>norm(entered)===norm(answer)&&entered.trim().toLowerCase()!==answer.toLowerCase();
+const done=(id)=>!!state.completed[id];
+const countDone=()=>Object.keys(state.completed).filter(k=>state.completed[k]).length;
+const solvedBlock=(b)=>TASKS.filter(t=>t.block===b&&done(t.id)).length;
+const save=()=>{try{localStorage.setItem(STORAGE,JSON.stringify(state))}catch(e){}};
+const block=t=>BLOCKS[t.block];
+function soundSuccess(big=false){if(!state.sound)return;try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;const ctx=new Ctx();const notes=big?[523,659,784,1047]:[587,740,880];notes.forEach((freq,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),start=ctx.currentTime+i*.095;osc.type='sine';osc.frequency.setValueAtTime(freq,start);gain.gain.setValueAtTime(.001,start);gain.gain.exponentialRampToValueAtTime(.055,start+.02);gain.gain.exponentialRampToValueAtTime(.001,start+.19);osc.connect(gain);gain.connect(ctx.destination);osc.start(start);osc.stop(start+.2)});setTimeout(()=>ctx.close(),1400)}catch(e){}}
+function confetti(big=false){if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;const root=document.getElementById('confetti');root.innerHTML='';const n=big?90:25;for(let i=0;i<n;i++){const c=document.createElement('span');c.className='confet';c.style.left=(big?Math.random()*100:25+Math.random()*50)+'%';c.style.background=['#9d78d9','#f4a7ce','#91d9bd','#ffcb6a','#8cb8ff'][i%5];c.style.setProperty('--dur',(2+Math.random()*1.7)+'s');c.style.setProperty('--dx',(Math.random()*350-175)+'px');c.style.setProperty('--rot',(Math.random()*900-450)+'deg');c.style.animationDelay=Math.random()*.25+'s';root.appendChild(c)}setTimeout(()=>root.replaceChildren(),4400)}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(el._timer);el._timer=setTimeout(()=>el.style.display='none',2400)}
+function setView(view){state.view=view;save();render()}
+function go(i){state.current=Math.max(0,Math.min(19,i));state.view='exercise';selectedMatch=null;incorrectMatch='';matchExplain='';save();render();window.scrollTo({top:0,behavior:'smooth'})}
+function home(){setView('home')}
+function setDraft(field,value){const id=TASKS[state.current].id;if(!state.draft[id])state.draft[id]={};state.draft[id][field]=value;save()}
+function getDraft(field){return (state.draft[TASKS[state.current].id]||{})[field]||''}
+function setChoice(i){const t=TASKS[state.current];if(done(t.id))return;setDraft('selected',String(i));render()}
+function chooseToken(index){const t=TASKS[state.current];if(done(t.id))return;const a=state.order[t.id]||[];if(!a.includes(index))state.order[t.id]=[...a,index];save();render()}
+function popToken(){const t=TASKS[state.current];if(done(t.id))return;const a=state.order[t.id]||[];state.order[t.id]=a.slice(0,-1);save();render()}
+function clearTokens(){const t=TASKS[state.current];if(done(t.id))return;state.order[t.id]=[];save();render()}
+function matchPick(side,i){const t=TASKS[state.current];if(done(t.id))return;const obj=state.match[t.id]||{};
+ if(side==='left'){if(obj[i]!==undefined)return;selectedMatch=i;incorrectMatch='';render();return}
+ if(selectedMatch===null){toast('First choose a sentence in English.');return}
+ if(Object.values(obj).includes(i)){toast('This Spanish sentence is already matched.');return}
+ const rightOriginal=t.rightOrder[i];
+ if(rightOriginal===selectedMatch){obj[selectedMatch]=i;state.match[t.id]=obj;selectedMatch=null;incorrectMatch='';save();if(Object.keys(obj).length===t.pairs.length){finishCorrect(false);return}else{soundSuccess(false);render();return}}
+ incorrectMatch='Not quite. Compare the meaning and try another Spanish sentence.';state.attempts[t.id]=(state.attempts[t.id]||0)+1;selectedMatch=null;save();render()}
+function markAttempt(t){state.attempts[t.id]=(state.attempts[t.id]||0)+1}
+function markSolved(t){if(done(t.id))return;const before=solvedBlock(t.block);state.completed[t.id]=true;state.firstTry[t.id]=state.attempts[t.id]===1;save();soundSuccess();if(before+1===TASKS.filter(a=>a.block===t.block).length){confetti(true);soundSuccess(true)}else confetti(false)}
+function finishCorrect(alreadyAttempted){const t=TASKS[state.current];if(!alreadyAttempted)markAttempt(t);markSolved(t);render()}
+function check(){const t=TASKS[state.current];if(done(t.id))return;let correct=false;let entered=[];if(t.type==='choice'){const pick=getDraft('selected');if(pick===''){toast('Choose an answer first.');return}correct=Number(pick)===t.answer}
+ else if(t.type==='fill'){const input=document.getElementById('fillInput');const v=input?input.value:getDraft('input');setDraft('input',v);if(!v.trim()){toast('Write the missing word first.');return}entered=[v];correct=t.answers.some(a=>norm(v)===norm(a))}
+ else if(t.type==='dialog'){entered=t.answers.map((_,i)=>{const el=document.getElementById('dlg'+i);const v=el?el.value:getDraft('d'+i);setDraft('d'+i,v);return v});if(entered.some(x=>!x.trim())){toast('Complete all blanks first.');return}correct=entered.every((s,i)=>t.answers[i].some(a=>norm(s)===norm(a)))}
+ else if(t.type==='order'){const a=state.order[t.id]||[];if(a.length!==t.tokens.length){toast('Use all the words first.');return}correct=a.every((v,i)=>v===t.answerOrder[i])}
+ else return;
+ markAttempt(t);if(correct){state.draft[t.id]={...(state.draft[t.id]||{}),accent:entered.some((v,i)=>{const a=t.type==='dialog'?t.answers[i][0]:t.answers[0];return accentDiff(v,a)})};markSolved(t);render()}else{state.draft[t.id]={...(state.draft[t.id]||{}),error:true};save();render();toast('Good try! Read the hint and try again.')}}
+function refreshProgress(){const n=countDone();document.getElementById('progressText').textContent=n+' / 20 completed';document.getElementById('progressFill').style.width=(n/20*100)+'%';document.getElementById('soundBtn').textContent=state.sound?'🔊 Sound on':'🔇 Sound off'}
+function renderHome(){const n=countDone();return `<section class="hero view"><span class="eyebrow">🌟 SPANISH WITH JACKIE · A0–A1</span><h1>¡Ya puedo usar<br><span style="color:#7b55bd">SER y ESTAR!</span></h1><p class="subtitle">20 interactive exercises to practice feelings, pronouns, origin, professions and simple conversations.</p><div class="pillrow"><span class="pill">🇺🇸 English instructions</span><span class="pill">✍️ Write & choose</span><span class="pill">🔗 Match with arrows</span><span class="pill">💬 Dialogues</span><span class="pill">🎉 Sound & confetti</span></div><div class="start-actions"><button class="btn primary large" onclick="go(${n?state.current:0})">▶ ${n?'Continue practicing':'Start practicing'}</button>${n?`<button class="btn secondary large" onclick="setView('results')">See my progress</button>`:''}</div></section><div class="section-heading"><h2>Choose a practice block</h2><span style="color:#796c8b;font-weight:800">One activity per screen</span></div><div class="block-grid">${BLOCKS.map((b,i)=>`<button class="block" style="background:linear-gradient(160deg,${b.color},#fff)" onclick="go(${b.range[0]})"><span class="emoji">${b.icon}</span><strong>${i+1}. ${b.name}</strong><small>${b.sub}</small><div class="mini-progress"><span style="width:${solvedBlock(i)/(b.range[1]-b.range[0]+1)*100}%"></span></div><small>${solvedBlock(i)}/${b.range[1]-b.range[0]+1} completed</small></button>`).join('')}</div><p class="legend">The practice is designed to be done in short sessions. You can stop, return and review any question. Your progress is saved in this browser.</p>`}
+function renderVisual(t){return `<div class="visual-row"><div class="bigemoji" aria-hidden="true">${t.emoji}</div><div><strong>${escapeHTML(t.context)}</strong><span>Look at the situation and use the correct Spanish form.</span></div></div>`}
+function formatSpan(t, inputs){return `<div class="sentence-card">${escapeHTML(t.spanish[0])}${inputs}${escapeHTML(t.spanish[1])}</div>`}
+function renderTaskBody(t){const solved=done(t.id);if(t.type==='choice'){const options=t.choices.map((v,i)=>{const selected=getDraft('selected')===String(i);return `<button class="option ${selected?'chosen':''} ${solved&&i===t.answer?'good':''}" onclick="setChoice(${i})" ${solved?'disabled':''}><span class="letter">${'ABC'[i]}</span><span>${escapeHTML(v)}</span></button>`}).join('');return `${t.spanish?formatSpan(t,'<span style="color:#ae8ed8">___</span>') : ''}<div class="options">${options}</div>`}
+if(t.type==='fill'){return formatSpan(t,`<input class="word-input" id="fillInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Write the missing Spanish word" oninput="setDraft('input',this.value)" value="${escapeHTML(getDraft('input'))}" ${solved?'disabled':''}>`)}
+if(t.type==='order'){const picked=state.order[t.id]||[];return `<div class="selected-row">${picked.length?picked.map(i=>`<span class="word-token slot">${escapeHTML(t.tokens[i])}</span>`).join(''):'<span class="empty">Click the words below in the correct order…</span>'}</div><div class="wordbank">${t.tokens.map((x,i)=>`<button class="word-token ${picked.includes(i)?'used':''}" onclick="chooseToken(${i})" ${picked.includes(i)||solved?'disabled':''}>${escapeHTML(x)}</button>`).join('')}</div><button class="btn secondary" onclick="popToken()" ${!picked.length||solved?'disabled':''}>↶ Undo</button> <button class="btn secondary" onclick="clearTokens()" ${!picked.length||solved?'disabled':''}>Reset words</button>`}
+if(t.type==='match'){const obj=state.match[t.id]||{};return `<div class="match-board" id="matchBoard"><svg class="match-lines" id="matchLines"><defs><marker id="arrowPurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8e65cd"/></marker></defs></svg><div class="match-col">${t.pairs.map((p,i)=>`<button class="match-item ${selectedMatch===i?'selected':''} ${obj[i]!==undefined?'connected':''}" data-left="${i}" onclick="matchPick('left',${i})" ${solved||obj[i]!==undefined?'disabled':''}>${escapeHTML(p[0])}</button>`).join('')}</div><div class="match-col">${t.rightOrder.map((j,i)=>`<button class="match-item ${Object.values(obj).includes(i)?'connected':''}" data-right="${i}" onclick="matchPick('right',${i})" ${solved||Object.values(obj).includes(i)?'disabled':''}>${escapeHTML(t.pairs[j][1])}</button>`).join('')}</div></div><p class="match-note">${Object.keys(obj).length} of ${t.pairs.length} pairs connected. ${selectedMatch!==null?'Now select its Spanish translation.':'Select an English sentence to start.'}</p>${incorrectMatch?`<div class="small-hint">💡 ${incorrectMatch}</div>`:''}`}
+if(t.type==='dialog'){return `<div class="dialogue">${t.lines.map(l=>`<div class="bubble"><span class="speaker">${l.speaker}</span>${l.text?escapeHTML(l.text):`${escapeHTML(l.segments[0])}<input class="word-input" id="dlg${l.blank}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Missing verb ${l.blank+1}" oninput="setDraft('d${l.blank}',this.value)" value="${escapeHTML(getDraft('d'+l.blank))}" ${solved?'disabled':''}>${escapeHTML(l.segments[1])}`}</div>`).join('')}</div>`}
+return ''}
+function feedback(t){const solved=done(t.id);const attempted=(state.attempts[t.id]||0)>0; if(solved){const accented=!!(state.draft[t.id]&&state.draft[t.id].accent);return `<div class="feedback" role="status"><div class="fb-title">✅ Excellent! You got it.</div><div class="correct-phrase">${escapeHTML(t.full)}</div><div class="translation">${escapeHTML(t.en)}</div><div class="why"><b>Why?</b> ${escapeHTML(t.why)}</div>${accented?'<div class="accent">✍️ Great verb choice! Remember the written accent in está / estás / están.</div>':''}</div>`}
+if(attempted){return `<div class="feedback bad" role="status"><div class="fb-title">💡 Nice try! Try again.</div><div class="why"><b>Hint:</b> ${escapeHTML(t.hint)}</div><div class="small-hint">You can change your answer and press <b>Check answer</b> again. The correct solution will appear after you get it right.</div></div>`}return `<p class="small-hint">💜 It's okay to make mistakes. Think about the subject first: I, you, he/she, we, or they.</p>`}
+function sidebar(t){const b=block(t);return `<aside class="sidebar"><span class="eyebrow">${b.icon} PRACTICE TIP</span><h3>${b.name}</h3><p>${b.side}</p><div class="rule"><strong>ESTAR · Feelings</strong><div>yo <b>estoy</b> · tú <b>estás</b><br>él/ella <b>está</b><br>nosotros <b>estamos</b><br>ellos/ustedes <b>están</b></div></div><div class="rule"><strong>SER · Origin & identity</strong><div>yo <b>soy</b> · tú <b>eres</b><br>él/ella <b>es</b><br>nosotros <b>somos</b><br>ellos/ustedes <b>son</b></div></div><div class="rule">✨ <b>Adjectives</b><div>ocupado / ocupada<br>estresados / estresadas</div></div><p>Check the verb separately from the adjective. The verb does not change just because someone is male or female.</p></aside>`}
+function renderExercise(){const t=TASKS[state.current];const b=block(t);const completed=done(t.id);return `<div class="view practice-layout"><section class="main-card"><div class="stephead"><span class="stepbadge">${b.icon} BLOCK ${t.block+1} · ${b.name.toUpperCase()}</span><span class="stepno">QUESTION ${state.current+1} / 20</span></div><div class="stepstrip"><div style="width:${(state.current+1)/20*100}%"></div></div><h2 class="question-title">${escapeHTML(t.title)}</h2><p class="instruction">${escapeHTML(t.instruction)}</p>${renderVisual(t)}<div class="activity-body">${renderTaskBody(t)}</div>${feedback(t)}<div class="footer-actions"><div class="leftbuttons"><button class="btn secondary" onclick="${state.current===0?'home()':`go(${state.current-1})`}">← ${state.current===0?'Home':'Previous'}</button></div><div class="rightbuttons">${!completed&&t.type!=='match'?`<button class="btn primary" onclick="check()">✓ Check answer</button>`:''}<button class="btn ${completed?'success':'secondary'}" onclick="${state.current===19?"setView('results')":`go(${state.current+1})`}">${state.current===19?'Results':'Next →'}</button></div></div><p class="legend">Your answers are saved automatically in this browser.</p></section>${sidebar(t)}</div>`}
+function renderResults(){const total=countDone();const first=Object.keys(state.firstTry).filter(k=>state.firstTry[k]).length;const incomplete=TASKS.filter(t=>!done(t.id));return `<section class="results-card view"><span class="eyebrow">🏅 SPANISH WITH JACKIE</span><h1 class="results-title">${total===20?'¡Excelente trabajo! 🎉':'Your practice progress 🌱'}</h1><p class="subtitle" style="font-size:20px;color:#685c78">${total===20?'You completed all 20 exercises. You can review the verbs and conversations anytime.':'You can continue practicing whenever you are ready. Your answers are saved.'}</p><div class="stat-row"><div class="stat"><strong>${total}/20</strong><span>Completed</span></div><div class="stat"><strong>${first}</strong><span>First-try correct</span></div><div class="stat"><strong>${5-incomplete.map(t=>t.block).filter((v,i,a)=>a.indexOf(v)===i).length}/5</strong><span>Blocks finished</span></div></div><h2 style="font-size:25px;margin:10px 0">Review any question</h2><p class="legend">Green = completed · Cream = try again · White = not started</p><div class="review-grid">${TASKS.map((t,i)=>`<button class="review-num ${done(t.id)?'done':state.attempts[t.id]?'needs':''}" onclick="go(${i})">${t.id} · ${done(t.id)?'✓':t.emoji}</button>`).join('')}</div><div class="start-actions" style="margin-top:22px"><button class="btn primary large" onclick="${incomplete.length?`go(${TASKS.indexOf(incomplete[0])})`:'home()'}">${incomplete.length?'▶ Continue unfinished exercises':'⌂ Back to home'}</button><button class="btn secondary large" onclick="resetConfirm()">↻ Start over</button></div><p class="legend">Your results are stored only in this browser; they are not sent to the teacher.</p></section>`}
+function resetConfirm(){if(!window.confirm('Start over? This will delete your saved answers and results in this browser.'))return;const sound=state.sound;state={view:'home',current:0,sound,completed:{},attempts:{},firstTry:{},draft:{},match:{},order:{}};save();render()}
+function drawMatchLines(){const t=TASKS[state.current];if(t.type!=='match')return;const board=document.getElementById('matchBoard'),svg=document.getElementById('matchLines');if(!board||!svg)return;const boardBox=board.getBoundingClientRect();const w=boardBox.width,h=boardBox.height;svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.querySelectorAll('path.connection').forEach(p=>p.remove());const paired=state.match[t.id]||{};Object.entries(paired).forEach(([l,r])=>{const a=board.querySelector(`[data-left="${l}"]`),b=board.querySelector(`[data-right="${r}"]`);if(!a||!b)return;const A=a.getBoundingClientRect(),B=b.getBoundingClientRect();const x1=A.right-boardBox.left-2,y1=A.top-boardBox.top+A.height/2,x2=B.left-boardBox.left+2,y2=B.top-boardBox.top+B.height/2;const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.classList.add('connection');p.setAttribute('d',`M${x1} ${y1} C${x1+30} ${y1},${x2-30} ${y2},${x2} ${y2}`);p.setAttribute('stroke','#8e65cd');p.setAttribute('stroke-width','3.5');p.setAttribute('fill','none');p.setAttribute('marker-end','url(#arrowPurple)');svg.appendChild(p)})}
+function render(){refreshProgress();const el=document.getElementById('app');el.innerHTML=state.view==='home'?renderHome():state.view==='results'?renderResults():renderExercise();if(state.view==='exercise'&&TASKS[state.current].type==='match'){requestAnimationFrame(drawMatchLines)}}
+document.getElementById('homeBtn').addEventListener('click',home);
+document.getElementById('soundBtn').addEventListener('click',()=>{state.sound=!state.sound;save();refreshProgress();toast(state.sound?'Sound on':'Sound off')});
+window.addEventListener('resize',()=>{if(state.view==='exercise')drawMatchLines()});
+render();
+</script>
+</body>
+</html>
